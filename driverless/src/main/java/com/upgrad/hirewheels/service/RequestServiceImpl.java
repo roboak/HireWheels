@@ -1,0 +1,90 @@
+package com.upgrad.hirewheels.service;
+
+import com.upgrad.hirewheels.dao.LocationRepository;
+import com.upgrad.hirewheels.dao.VehicleRepository;
+import com.upgrad.hirewheels.dto.AddVehicleDTO;
+import com.upgrad.hirewheels.dto.OptVehicleDTO;
+import com.upgrad.hirewheels.entities.*;
+import com.upgrad.hirewheels.dao.AdminRequestRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RequestServiceImpl implements RequestService {
+
+    @Autowired
+    AdminRequestRepository adminRequestRepository;
+
+    @Autowired
+    VehicleRepository vehicleRepository;
+
+    @Autowired
+    LocationRepository locationRepository;
+
+    public AdminRequest userOptRequest(OptVehicleDTO vehicle, int vehicleId) {
+        AdminRequest returnedVehicle = vehicleRepository.findById(vehicleId).get().getAdminRequest();
+        Activity activity = new Activity();
+        activity.setActivityId(vehicle.getActivityId());
+        returnedVehicle.setActivity(activity);
+        RequestStatus requestStatus = new RequestStatus();
+        requestStatus.setRequestStatusId(vehicle.getRequestStatusId());
+        returnedVehicle.setRequestStatus(requestStatus);
+        returnedVehicle.setUserComments(vehicle.getAdminComments());
+        adminRequestRepository.save(returnedVehicle);
+        return returnedVehicle;
+    }
+
+    public Vehicle addVehicleRequest(AddVehicleDTO vehicle, int userId) {
+        Vehicle addVehicle = new Vehicle();
+        AdminRequest adminRequest = new AdminRequest();
+        String userRole = vehicle.getUserRole();
+        addVehicle.setVehicleModel(vehicle.getVehicleModel());
+        Users users = new Users();
+        users.setUserId(userId);
+        addVehicle.setUsers(users);
+        addVehicle.setVehicleNumber(vehicle.getVehicleNumber());
+        addVehicle.setColor(vehicle.getColor());
+        FuelType fuelType = new FuelType();
+        fuelType.setFuelTypeId(vehicle.getFuelTypeId());
+        addVehicle.setFuelType(fuelType);
+        addVehicle.setCarImageUrl(vehicle.getCarImageUrl());
+        Location location = new Location();
+        location.setAddress(vehicle.getAddress());
+        location.setLocationName(vehicle.getLocationName());
+        location.setPincode(vehicle.getPincode());
+        City city = new City();
+        city.setCityId(vehicle.getCityId());
+        location.setCity(city);
+        Location returnedLocation= locationRepository.save(location);
+        addVehicle.setLocationWithVehicle(returnedLocation);
+        VehicleSubCategory vehicleSubCategory = new VehicleSubCategory();
+        vehicleSubCategory.setVehicleSubCategoryId(vehicle.getVehicleSubCategoryId());
+        addVehicle.setVehicleSubCategory(vehicleSubCategory);
+        Vehicle vehicle1 = vehicleRepository.save(addVehicle);
+        Activity activity = new Activity();
+        RequestStatus requestStatus = new RequestStatus();
+        Users users1 = new Users();
+        if (!userRole.equals("Admin")) {
+            activity.setActivityId(202);
+            adminRequest.setActivity(activity);
+            requestStatus.setRequestStatusId(301);
+            adminRequest.setRequestStatus(requestStatus);
+            users1.setUserId(userId);
+            adminRequest.setUsers(users1);
+            adminRequest.setUserComments("Kindly Approve My Vehicle.");
+            adminRequest.setVehicle(vehicle1);
+            adminRequestRepository.save(adminRequest);
+        } else {
+            activity.setActivityId(202);
+            adminRequest.setActivity(activity);
+            requestStatus.setRequestStatusId(302);
+            adminRequest.setRequestStatus(requestStatus);
+            users1.setUserId(userId);
+            adminRequest.setUsers(users);
+            adminRequest.setAdminComments("Approved as added by Admin");
+            adminRequest.setVehicle(vehicle1);
+            adminRequestRepository.save(adminRequest);
+        }
+        return vehicle1;
+    }
+}

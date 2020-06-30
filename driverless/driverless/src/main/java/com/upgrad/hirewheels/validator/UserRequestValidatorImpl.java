@@ -14,7 +14,7 @@ import java.util.List;
 public class UserRequestValidatorImpl implements UserRequestValidator {
 
     List<Integer> requestIds = new ArrayList<>(Arrays.asList(301,302,303));
-    List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203,204));
+    List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
 
     @Override
     public void validateOptVehicleRequest(OptVehicleDTO vehicle, int vehicleId) {

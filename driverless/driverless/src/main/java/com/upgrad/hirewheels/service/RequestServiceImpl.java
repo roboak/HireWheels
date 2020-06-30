@@ -63,7 +63,7 @@ public class RequestServiceImpl implements RequestService {
         RequestStatus requestStatus = new RequestStatus();
         Users users1 = new Users();
         if (!userRole.equals("Admin")) {
-            activity.setActivityId(202);
+            activity.setActivityId(201);
             adminRequest.setActivity(activity);
             requestStatus.setRequestStatusId(301);
             adminRequest.setRequestStatus(requestStatus);
@@ -73,7 +73,7 @@ public class RequestServiceImpl implements RequestService {
             adminRequest.setVehicle(vehicle1);
             adminRequestRepository.save(adminRequest);
         } else {
-            activity.setActivityId(202);
+            activity.setActivityId(201);
             adminRequest.setActivity(activity);
             requestStatus.setRequestStatusId(302);
             adminRequest.setRequestStatus(requestStatus);

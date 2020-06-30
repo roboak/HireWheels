@@ -54,13 +54,13 @@ PricePerHour(150);
 CityId(1);
 CityName("Mumbai");
 
-#Fuel Type
+# Fuel Type
 FuelType("Petrol");
 FuelTypeId(1);
 FuelType("Diesel");
 FuelTypeId(2);
 
-#RequestStatus
+# RequestStatus
 RequestStatusId(301);
 RequestStatusName("PENDING");
 RequestStatusId(302);
@@ -68,7 +68,7 @@ RequestStatusName("APPROVED");
 RequestStatusId(303);
 RequestStatusName("REJECTED");
 
-#Location
+# Location
 LocationName("Worli");
 Address("Dr E Moses Rd, Worli Naka, Upper Worli");
 Pincode(400018);

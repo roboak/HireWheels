@@ -9,7 +9,7 @@ public class UserDetailResponse {
     String firstName;
     String lastName;
     String email;
-    long mobileNumber;
+    String mobileNumber;
     int walletMoney;
     String successMessage;
     String errorMessage;

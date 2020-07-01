@@ -23,7 +23,7 @@ public class Users {
     @Column( nullable = false, unique = true)
     String email;
     @Column( nullable = false, unique = true)
-    long mobileNo;
+    String mobileNo;
     int walletMoney;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

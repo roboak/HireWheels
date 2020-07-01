@@ -11,10 +11,9 @@ import java.util.List;
 public class RequestStatus {
     @Id
     int requestStatusId;
-    @Column( nullable = false)
+    @Column( nullable = false, unique = true)
     String requestStatusName;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "requestStatus",cascade
-            = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "requestStatus")
     @JsonManagedReference
     List<AdminRequest> adminRequestList;
 }

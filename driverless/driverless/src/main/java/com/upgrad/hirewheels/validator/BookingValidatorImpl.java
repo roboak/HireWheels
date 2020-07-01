@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.dto.AddBookingDTO;
+import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class BookingValidatorImpl implements BookingValidator {
 
 
     @Override
-    public void validateBooking(AddBookingDTO vehicle) throws ParseException {
+    public void validateBooking(BookingDTO vehicle) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = sdf.format(new Date());
         Date todaysDate = sdf.parse(dateString);

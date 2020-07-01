@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.controller;
 
-import com.upgrad.hirewheels.dto.AddBookingDTO;
+import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
 import com.upgrad.hirewheels.service.BookingService;
@@ -26,7 +26,7 @@ public class BookingController {
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
     @PostMapping("/bookVehicle")
-    public ResponseEntity booking(@RequestBody AddBookingDTO vehicle) {
+    public ResponseEntity booking(@RequestBody BookingDTO vehicle) {
         ResponseEntity responseEntity = null;
         try {
             bookingValidator.validateBooking(vehicle);

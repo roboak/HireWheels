@@ -14,10 +14,6 @@ public class VehicleDetailResponse {
     String color;
     String fuelType;
     int locationId;
-    String locationName;
-    String address;
-    String cityName;
-    int pincode;
     String carImageUrl;
     int costPerHour;
     int activityId;

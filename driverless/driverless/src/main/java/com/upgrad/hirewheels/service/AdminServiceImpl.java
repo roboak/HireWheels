@@ -1,14 +1,14 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.VehicleRepository;
-import com.upgrad.hirewheels.dto.OptVehicleDTO;
+import com.upgrad.hirewheels.dao.VehicleDAO;
+import com.upgrad.hirewheels.dto.AdminActivityDTO;
 import com.upgrad.hirewheels.entities.Activity;
 import com.upgrad.hirewheels.entities.AdminRequest;
-import com.upgrad.hirewheels.dao.AdminRequestRepository;
-import com.upgrad.hirewheels.dao.RequestStatusRepository;
+import com.upgrad.hirewheels.dao.AdminRequestDAO;
+import com.upgrad.hirewheels.dao.RequestStatusDAO;
 import com.upgrad.hirewheels.entities.RequestStatus;
 import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.responsemodel.AvailableRequestResponse;
+import com.upgrad.hirewheels.responsemodel.AdminRequestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,44 +19,60 @@ import java.util.List;
 public class AdminServiceImpl implements AdminService{
 
     @Autowired
-    AdminRequestRepository adminRequestRepository;
+    AdminRequestDAO adminRequestDAO;
 
     @Autowired
-    RequestStatusRepository requestStatusRepository;
+    RequestStatusDAO requestStatusDAO;
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    VehicleDAO vehicleDAO;
 
-    public List<AvailableRequestResponse> getAllAdminRequest(int requestStatus) {
-      List<AdminRequest> returnedRequests = requestStatusRepository.findByRequestStatusId(requestStatus).getAdminRequestList();
-      List<AvailableRequestResponse> mappedList = new ArrayList<>();
+    /**
+     * Returns all the PENDING admin requests for approvals requested by User
+     * @param requestStatusId
+     * @return
+     */
+
+    public List<AdminRequestResponse> getAllAdminRequest(int requestStatusId) {
+      List<AdminRequest> returnedRequests = requestStatusDAO.findByRequestStatusId(requestStatusId).getAdminRequestList();
+      List<AdminRequestResponse> mappedList = new ArrayList<>();
       returnedRequests.forEach(a-> {
-          AvailableRequestResponse availableRequestResponse = new AvailableRequestResponse();
-          availableRequestResponse.setUserComments(a.getUserComments());
-          availableRequestResponse.setAdminComments(a.getAdminComments());
-          availableRequestResponse.setRequestId(a.getRequestId());
-          availableRequestResponse.setUserId(a.getUser().getUserId());
-          availableRequestResponse.setVehicleId(a.getVehicle().getVehicleId());
-          availableRequestResponse.setActivityId(a.getActivity().getActivityId());
-          availableRequestResponse.setRequestStatusId(a.getRequestStatus().getRequestStatusId());
-          mappedList.add(availableRequestResponse);
+          AdminRequestResponse adminRequestResponse = new AdminRequestResponse();
+          adminRequestResponse.setUserComments(a.getUserComments());
+          adminRequestResponse.setAdminComments(a.getAdminComments());
+          adminRequestResponse.setRequestId(a.getRequestId());
+          adminRequestResponse.setUserId(a.getUser().getUserId());
+          adminRequestResponse.setVehicleId(a.getVehicle().getVehicleId());
+          adminRequestResponse.setVehicleModel(a.getVehicle().getVehicleModel());
+          adminRequestResponse.setVehicleNumber(a.getVehicle().getVehicleNumber());
+          adminRequestResponse.setCarImageUrl(a.getVehicle().getCarImageUrl());
+          adminRequestResponse.setActivityId(a.getActivity().getActivityId());
+          adminRequestResponse.setRequestStatusId(a.getRequestStatus().getRequestStatusId());
+          mappedList.add(adminRequestResponse);
       });
       return mappedList;
     }
 
-    public Boolean updateRequest(OptVehicleDTO vehicle, int vehicleId) {
-        AdminRequest returnedVehicle = vehicleRepository.findById(vehicleId).get().getAdminRequest();
+    /**
+     * Updates the request status of any pending approvals to APPROVED or REJECTED
+     * @param adminActivityDTO
+     * @param vehicleId
+     * @return
+     */
+
+    public Boolean updateRequest(AdminActivityDTO adminActivityDTO, int vehicleId) {
+        AdminRequest returnedVehicle = vehicleDAO.findById(vehicleId).get().getAdminRequest();
         if( returnedVehicle == null){
             throw new APIException("Invalid Vehicle Id");
         }
         Activity activity = new Activity();
-        activity.setActivityId(vehicle.getActivityId());
+        activity.setActivityId(adminActivityDTO.getActivityId());
         returnedVehicle.setActivity(activity);
         RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setRequestStatusId(vehicle.getRequestStatusId());
+        requestStatus.setRequestStatusId(adminActivityDTO.getRequestStatusId());
         returnedVehicle.setRequestStatus(requestStatus);
-        returnedVehicle.setUserComments(vehicle.getAdminComments());
-        adminRequestRepository.save(returnedVehicle);
+        returnedVehicle.setUserComments(adminActivityDTO.getUserComments());
+        adminRequestDAO.save(returnedVehicle);
         return true;
     }
 }

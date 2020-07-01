@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.controller;
 
-import com.upgrad.hirewheels.dto.AddUserDTO;
+import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
@@ -31,7 +31,7 @@ public class AuthenticationController{
     UserValidator userValidator;
 
     @PostMapping("/login")
-    public ResponseEntity setUserLogin(@RequestBody LoginDTO user){
+    public ResponseEntity userLogin(@RequestBody LoginDTO user){
         ResponseEntity responseEntity = null;
         UserDetailResponse userDetailResponse = new UserDetailResponse();
             try {
@@ -57,14 +57,13 @@ public class AuthenticationController{
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity userSignUp(@RequestBody AddUserDTO user) {
+    public ResponseEntity userSignUp(@RequestBody UserDTO user) {
         ResponseEntity responseEntity = null;
         try {
             userValidator.validateUserSignUp(user);
             Users functionReturn = userService.createUser(user);
             if (functionReturn != null) {
-                SuccessResponse response = new SuccessResponse(new Date(), "User Successfully Signed Up",
-                        "/sign-up", 200);
+                SuccessResponse response = new SuccessResponse(new Date(), "User Successfully Signed Up", 200);
                 responseEntity = new ResponseEntity(response, HttpStatus.OK);
             }
         }
@@ -81,8 +80,7 @@ public class AuthenticationController{
             userValidator.validateChangePassword(user);
             boolean functionReturn = userService.updatePassword(user.getEmail(), user.getMobileNo(), user.getPassword());
             if (functionReturn == true) {
-                SuccessResponse response = new SuccessResponse(new Date(), "Password Successfully Changed",
-                        "/forgot-pwd", 200);
+                SuccessResponse response = new SuccessResponse(new Date(), "Password Successfully Changed", 200);
                 return new ResponseEntity(response, HttpStatus.OK);
             }
         } catch (GlobalExceptionHandler e){

@@ -1,9 +1,8 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.dto.AddVehicleDTO;
-import com.upgrad.hirewheels.dto.OptVehicleDTO;
+import com.upgrad.hirewheels.dto.VehicleDTO;
+import com.upgrad.hirewheels.dto.AdminRequestDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,13 +10,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class UserRequestValidatorImpl implements UserRequestValidator {
+public class RequestValidatorImpl implements RequestValidator {
 
     List<Integer> requestIds = new ArrayList<>(Arrays.asList(301,302,303));
     List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
 
     @Override
-    public void validateOptVehicleRequest(OptVehicleDTO vehicle, int vehicleId) {
+    public void validateChangeVehicleAvailability(AdminRequestDTO vehicle, int vehicleId) {
         if (vehicleId == 0){
             throw new APIException("Vehicle Id cannot be empty or null");
         }
@@ -36,10 +35,7 @@ public class UserRequestValidatorImpl implements UserRequestValidator {
     }
 
     @Override
-    public void validateAddVehicleRequest(AddVehicleDTO vehicleDTO, int userId) {
-        if (userId == 0){
-            throw new APIException("UserId Id cannot be empty or null");
-        }
+    public void validateAddVehicleRequest(VehicleDTO vehicleDTO) {
         if(vehicleDTO.getVehicleNumber().isEmpty() || vehicleDTO.getVehicleNumber() == null){
             throw new APIException("Vehicle Number cannot be null or empty");
         }
@@ -64,8 +60,8 @@ public class UserRequestValidatorImpl implements UserRequestValidator {
         if (vehicleDTO.getCityId() == 0){
             throw new APIException("CityId cannot be empty or null");
         }
-        if(vehicleDTO.getUserRole().isEmpty() || vehicleDTO.getUserRole() == null){
-            throw new APIException("userRole cannot be null or empty");
+        if(vehicleDTO.getUserId() == 0){
+            throw new APIException("userId cannot be null or empty");
         }
         if(vehicleDTO.getCarImageUrl().isEmpty() || vehicleDTO.getCarImageUrl() == null){
             throw new APIException("CarImage URL cannot be null or empty");

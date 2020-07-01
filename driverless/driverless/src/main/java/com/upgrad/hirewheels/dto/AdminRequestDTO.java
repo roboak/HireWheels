@@ -3,7 +3,7 @@ package com.upgrad.hirewheels.dto;
 import lombok.Data;
 
 @Data
-public class OptVehicleDTO {
+public class AdminRequestDTO {
     int activityId;
     int requestStatusId;
     String userComments;

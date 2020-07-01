@@ -1,11 +1,11 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.LocationRepository;
-import com.upgrad.hirewheels.dao.UserRepository;
-import com.upgrad.hirewheels.dao.VehicleRepository;
-import com.upgrad.hirewheels.dto.AddBookingDTO;
+import com.upgrad.hirewheels.dao.LocationDAO;
+import com.upgrad.hirewheels.dao.UserDAO;
+import com.upgrad.hirewheels.dao.VehicleDAO;
+import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
-import com.upgrad.hirewheels.dao.BookingRepository;
+import com.upgrad.hirewheels.dao.BookingDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,39 +14,45 @@ import org.springframework.stereotype.Service;
 public class BookingServiceImpl implements BookingService {
 
     @Autowired
-    BookingRepository bookingRepository;
+    BookingDAO bookingDAO;
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
     @Autowired
-    LocationRepository locationRepository;
+    LocationDAO locationDAO;
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    VehicleDAO vehicleDAO;
 
-    public Booking addBooking(AddBookingDTO booking){
+    /**
+     * Helps in adding a bookingDTO for a Vehicle with respect to valid userId,LocationId and BookingId
+     * @param bookingDTO
+     * @return
+     */
+
+    public Booking addBooking(BookingDTO bookingDTO){
         Booking booking1 = new Booking();
-        booking1.setAmount(booking.getAmount());
-        booking1.setBookingDate(booking.getBookingDate());
-        booking1.setPickUpDate(booking.getPickupDate());
-        booking1.setDropOffDate(booking.getDropoffDate());
-        if (userRepository.findById(booking.getUserId()).get() == null){
+        booking1.setAmount(bookingDTO.getAmount());
+        booking1.setBookingDate(bookingDTO.getBookingDate());
+        booking1.setPickUpDate(bookingDTO.getPickupDate());
+        booking1.setDropOffDate(bookingDTO.getDropoffDate());
+        if (userDAO.findById(bookingDTO.getUserId()).get() == null){
             throw new APIException("Invalid User Id for Booking");
         } else {
-            booking1.setBookingWithUser(userRepository.findById(booking.getUserId()).get());
+            booking1.setBookingWithUser(userDAO.findById(bookingDTO.getUserId()).get());
         }
-        if (locationRepository.findById(booking.getLocationId()).get() == null){
+        if (locationDAO.findById(bookingDTO.getLocationId()).get() == null){
             throw new APIException("Invalid Location Id for Booking");
         } else {
-            booking1.setLocationWithBooking(locationRepository.findById(booking.getLocationId()).get());
+            booking1.setLocationWithBooking(locationDAO.findById(bookingDTO.getLocationId()).get());
         }
-        if (vehicleRepository.findById(booking.getVehicleId()).get() == null){
+        if (vehicleDAO.findById(bookingDTO.getVehicleId()).get() == null){
             throw new APIException("Invalid Vehicle Id for Booking");
         } else {
-            booking1.setVehicleWithBooking(vehicleRepository.findById(booking.getVehicleId()).get());
+            booking1.setVehicleWithBooking(vehicleDAO.findById(bookingDTO.getVehicleId()).get());
         }
-        Booking returnResponse = bookingRepository.save(booking1);
+        Booking returnResponse = bookingDAO.save(booking1);
         return returnResponse;
     }
 

@@ -2,7 +2,6 @@ package com.upgrad.hirewheels.controller;
 
 
 import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
 import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 import com.upgrad.hirewheels.service.UserService;
 import com.upgrad.hirewheels.service.VehicleService;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +30,9 @@ public class VehicleController {
     @Autowired
     VehicleValidator vehicleValidator;
 
-    private static final Logger logger = LoggerFactory.getLogger(UserRequestController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
-    @GetMapping("/allVehicles")
+    @GetMapping("/vehicles")
     public ResponseEntity getAvailableVehicles(@RequestParam("categoryName") String categoryName, @RequestParam("pickUpDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date pickupDate,
                                                @RequestParam("dropDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dropDate, @RequestParam("locationId") int locationId){
         ResponseEntity responseEntity = null;
@@ -48,7 +46,7 @@ public class VehicleController {
         return responseEntity;
     }
 
-    @GetMapping("/allVehiclesByUser/{userId}")
+    @GetMapping("/users/{userId}/vehicles")
     public ResponseEntity getVehicleByUserId(@PathVariable int userId){
         ResponseEntity responseEntity = null;
         try {

@@ -3,7 +3,7 @@ package com.upgrad.hirewheels.dto;
 import lombok.Data;
 
 @Data
-public class AddVehicleDTO {
+public class VehicleDTO {
      String vehicleModel;
      String vehicleNumber;
      int vehicleSubCategoryId;
@@ -13,5 +13,5 @@ public class AddVehicleDTO {
      int locationId;
      String carImageUrl;
      int cityId;
-     String userRole;
+     int userId;
 }

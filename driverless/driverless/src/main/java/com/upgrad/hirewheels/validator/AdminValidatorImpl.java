@@ -1,5 +1,5 @@
 package com.upgrad.hirewheels.validator;
-import com.upgrad.hirewheels.dto.OptVehicleDTO;
+import com.upgrad.hirewheels.dto.AdminActivityDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class AdminValidatorImpl implements AdminValidator{
     }
 
     @Override
-    public void validateAddVehicleRequest(OptVehicleDTO vehicle, int vechileId) {
+    public void validateUpdateVehicleRequest(AdminActivityDTO vehicle, int vechileId) {
         if (vechileId == 0){
             throw new APIException("Vehicle Id cannot be empty or null");
         }

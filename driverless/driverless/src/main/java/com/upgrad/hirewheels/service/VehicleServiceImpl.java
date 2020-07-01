@@ -17,38 +17,47 @@ import java.util.stream.Collectors;
 public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    VehicleDAO vehicleDAO;
 
     @Autowired
-    VehicleCategoryRepo vehicleCategoryRepo;
+    VehicleCategoryDAO vehicleCategoryDAO;
 
     @Autowired
-    RequestStatusRepository requestStatusRepository;
+    RequestStatusDAO requestStatusDAO;
 
     @Autowired
-    AdminRequestRepository adminRequestRepository;
+    AdminRequestDAO adminRequestDAO;
 
     @Autowired
-    BookingRepository bookingRepository;
+    BookingDAO bookingDAO;
 
     @Autowired
-    LocationRepository locationRepository;
+    LocationDAO locationDAO;
 
 
     @Autowired
-    FuelTypeRepository fuelTypeRepository;
+    FuelTypeDAO fuelTypeDAO;
 
     @Autowired
-    CityRepository cityRepository;
+    CityDAO cityDAO;
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
+
+    /**
+     * Returns all the available vehicle in the requested Category for booking with respect to Date, Location and Availability.
+     * @param categoryName
+     * @param pickUpDate
+     * @param dropDate
+     * @param locationId
+     * @return
+     */
 
     public List<VehicleDetailResponse> getAvailableVehicles(String categoryName, Date pickUpDate,Date dropDate, int locationId) {
         List<Vehicle> returnedVehicleList = new ArrayList<>();
-        if(vehicleCategoryRepo.findByVehicleCategoryName(categoryName) != null){
-            vehicleCategoryRepo.findByVehicleCategoryName(categoryName).getVehicleSubCategories().forEach(a-> a.getVehicle().forEach(b-> {
+        if(vehicleCategoryDAO.findByVehicleCategoryName(categoryName) != null){
+            vehicleCategoryDAO.findByVehicleCategoryName(categoryName).getVehicleSubCategoriesList().forEach(a-> a.getVehicleList().forEach(b-> {
                 if (b.getLocationWithVehicle().getLocationId() == locationId) {
                     returnedVehicleList.add(b);
                 }
@@ -58,8 +67,8 @@ public class VehicleServiceImpl implements VehicleService {
         }
 
         List<Integer> bookedVehicles = new ArrayList<>();
-        bookingRepository.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicles.add(a.getVehicleWithBooking().getVehicleId());});
-        List<Integer> approvedVehicles = requestStatusRepository.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
+        bookingDAO.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicles.add(a.getVehicleWithBooking().getVehicleId());});
+        List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
         for (Vehicle v : returnedVehicleList) {
             if (approvedVehicles.contains(v.getVehicleId())) {
@@ -73,11 +82,7 @@ public class VehicleServiceImpl implements VehicleService {
                     y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
                     y.setFuelType(v.getFuelType().getFuelType());
                     y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                    y.setLocationName(v.getLocationWithVehicle().getLocationName());
-                    y.setAddress(v.getLocationWithVehicle().getAddress());
-                    y.setPincode(v.getLocationWithVehicle().getPincode());
                     y.setCarImageUrl(v.getCarImageUrl());
-                    y.setCityName(v.getLocationWithVehicle().getCity().getCityName());
                     mapVehicle.add(y);
                 }
             }
@@ -85,9 +90,15 @@ public class VehicleServiceImpl implements VehicleService {
        return mapVehicle;
     }
 
+    /**
+     * Returns all the vehicle registered by user.
+     * @param userId
+     * @return
+     */
+
     public List<VehicleDetailResponse> getAllVehicleByUserId(int userId) {
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
-        List<Vehicle> returnedVehicleList = userRepository.findById(userId).get().getVehiclesList();
+        List<Vehicle> returnedVehicleList = userDAO.findById(userId).get().getVehiclesList();
         if (returnedVehicleList == null){
             throw new APIException("Invalid UserId");
 
@@ -102,11 +113,7 @@ public class VehicleServiceImpl implements VehicleService {
                 y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
                 y.setFuelType(v.getFuelType().getFuelType());
                 y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                y.setLocationName(v.getLocationWithVehicle().getLocationName());
-                y.setAddress(v.getLocationWithVehicle().getAddress());
-                y.setPincode(v.getLocationWithVehicle().getPincode());
                 y.setCarImageUrl(v.getCarImageUrl());
-                y.setCityName(v.getLocationWithVehicle().getCity().getCityName());
                 y.setActivityId(v.getAdminRequest().getActivity().getActivityId());
                 y.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
                 mapVehicle.add(y);

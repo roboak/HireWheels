@@ -1,9 +1,9 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.UserRoleRepository;
-import com.upgrad.hirewheels.dto.AddUserDTO;
+import com.upgrad.hirewheels.dao.UserRoleDAO;
+import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.entities.Users;
-import com.upgrad.hirewheels.dao.UserRepository;
+import com.upgrad.hirewheels.dao.UserDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.UserAlreadyExistsException;
 import com.upgrad.hirewheels.exceptions.UserNotFoundException;
@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
     @Autowired
-    UserRoleRepository userRoleRepository;
+    UserRoleDAO userRoleDAO;
 
     /**
      * Checks if the user is registered or not. If registered it returns the user details else throws an error.
@@ -28,11 +28,11 @@ public class UserServiceImpl implements UserService{
      */
 
     public Users getUserDetails(String email, String password) {
-            Users checkUser = userRepository.findByEmail(email);
+            Users checkUser = userDAO.findByEmail(email);
             if (checkUser == null){
                 throw new UserNotFoundException("User Not Registered");
             }
-            Users user = userRepository.findByEmailAndPassword(email, password);
+            Users user = userDAO.findByEmailAndPassword(email, password);
             return user;
     }
 
@@ -42,24 +42,24 @@ public class UserServiceImpl implements UserService{
      * @return saved user details.
      */
 
-    public Users createUser(AddUserDTO user) {
-            Users returnedUser = userRepository.findByEmail(user.getEmail());
+    public Users createUser(UserDTO user) {
+            Users returnedUser = userDAO.findByEmail(user.getEmail());
                 if ( returnedUser != null) {
                     throw new UserAlreadyExistsException("Email Already Exists");
                 }
-            Users returnedUser1 = userRepository.findByMobileNo(user.getMobileNo());
+            Users returnedUser1 = userDAO.findByMobileNo(user.getMobileNo());
             if (returnedUser1 != null) {
                 throw new UserAlreadyExistsException("Mobile Number Already Exists");
                 }
             Users users = new Users();
             users.setWalletMoney(10000);
-            users.setUserRole(userRoleRepository.findByRoleId(2));
+            users.setUserRole(userRoleDAO.findByRoleId(2));
             users.setEmail(user.getEmail());
             users.setPassword(user.getPassword());
             users.setFirstName(user.getFirstName());
             users.setLastName(user.getLastName());
             users.setMobileNo(user.getMobileNo());
-            Users savedUser = userRepository.save(users);
+            Users savedUser = userDAO.save(users);
             return savedUser;
     }
 
@@ -72,15 +72,15 @@ public class UserServiceImpl implements UserService{
      * @return
      */
 
-    public Boolean updatePassword(String email, long mobileNo, String password) {
-            Users user = userRepository.findByEmailAndMobileNo(email,mobileNo);
+    public Boolean updatePassword(String email, String mobileNo, String password) {
+            Users user = userDAO.findByEmailAndMobileNo(email,mobileNo);
             if(user == null){
                 throw new APIException("Invalid Email/Mobile Number");
             }
             String currentPassword = user.getPassword();
                 if(user != null && !currentPassword.equals(password)) {
                     user.setPassword(password);
-                    userRepository.save(user);
+                    userDAO.save(user);
                     return true;
                 } else {
                     throw new APIException("The new password should be different from the existing one");

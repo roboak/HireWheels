@@ -12,14 +12,14 @@ public class VehicleSubCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int vehicleSubCategoryId;
-    @Column( nullable = false)
+    @Column( nullable = false, unique = true)
     String vehicleSubCategoryName;
     @Column( nullable = false)
     int pricePerHour;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleSubCategory", cascade
             = CascadeType.ALL)
-    List<Vehicle> vehicle;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    List<Vehicle> vehicleList;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicleCategoryId")
     VehicleCategory vehicleCategory;
 }

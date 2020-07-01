@@ -8,6 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface BookingRepository extends JpaRepository<Booking, Integer> {
+public interface BookingDAO extends JpaRepository<Booking, Integer> {
  List<Booking> findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(Date pickUpDate, Date dropOffDate);
 }

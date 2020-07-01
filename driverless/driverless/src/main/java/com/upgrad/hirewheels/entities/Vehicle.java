@@ -15,13 +15,13 @@ public class Vehicle {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    int vehicleId;
-   @Column( nullable = false, unique = true)
+   @Column( nullable = false)
    String vehicleModel;
    @Column( nullable = false, unique = true)
    String vehicleNumber;
-   @Column( nullable = false, unique = true)
+   @Column( nullable = false)
    String color;
-   @Column( nullable = false, unique = true)
+   @Column( nullable = false)
    String carImageUrl;
    @ManyToOne(fetch = FetchType.LAZY,cascade
            = CascadeType.MERGE)

@@ -12,7 +12,7 @@ import java.util.List;
 public class Activity {
     @Id
     int activityId;
-    @Column( nullable = false, unique = true)
+    @Column(unique = true)
     String activityType;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "activity")
     @JsonManagedReference

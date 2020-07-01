@@ -11,7 +11,7 @@ import java.util.List;
 public class RequestStatus {
     @Id
     int requestStatusId;
-    @Column( nullable = false, unique = true)
+    @Column(unique = true)
     String requestStatusName;
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "requestStatus")
     @JsonManagedReference

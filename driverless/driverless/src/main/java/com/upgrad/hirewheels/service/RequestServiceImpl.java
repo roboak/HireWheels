@@ -72,28 +72,28 @@ public class RequestServiceImpl implements RequestService {
     
 
     public Vehicle addVehicleRequest(VehicleDTO vehicleDTO) {
-        Vehicle addVehicle = new Vehicle();
+        Vehicle vehicle = new Vehicle();
         AdminRequest adminRequest = new AdminRequest();
-        addVehicle.setVehicleModel(vehicleDTO.getVehicleModel());
+        vehicle.setVehicleModel(vehicleDTO.getVehicleModel());
         Users users = new Users();
         users.setUserId(vehicleDTO.getUserId());
-        addVehicle.setUser(users);
-        addVehicle.setVehicleNumber(vehicleDTO.getVehicleNumber());
-        addVehicle.setColor(vehicleDTO.getColor());
+        vehicle.setUser(users);
+        vehicle.setVehicleNumber(vehicleDTO.getVehicleNumber());
+        vehicle.setColor(vehicleDTO.getColor());
         FuelType fuelType = new FuelType();
         fuelType.setFuelTypeId(vehicleDTO.getFuelTypeId());
-        addVehicle.setFuelType(fuelType);
-        addVehicle.setCarImageUrl(vehicleDTO.getCarImageUrl());
+        vehicle.setFuelType(fuelType);
+        vehicle.setCarImageUrl(vehicleDTO.getCarImageUrl());
         if (locationDAO.findById(vehicleDTO.getLocationId()).get() == null){
             throw new APIException("Invalid Location Id for Vehicle");
         } else {
             Location location = locationDAO.findById(vehicleDTO.getLocationId()).get();
-            addVehicle.setLocationWithVehicle(location);
+            vehicle.setLocationWithVehicle(location);
         }
         VehicleSubCategory vehicleSubCategory = new VehicleSubCategory();
         vehicleSubCategory.setVehicleSubCategoryId(vehicleDTO.getVehicleSubCategoryId());
-        addVehicle.setVehicleSubCategory(vehicleSubCategory);
-        Vehicle vehicle = vehicleDAO.save(addVehicle);
+        vehicle.setVehicleSubCategory(vehicleSubCategory);
+        Vehicle vehicle1 = vehicleDAO.save(vehicle);
         Activity activity = new Activity();
         RequestStatus requestStatus = new RequestStatus();
         activity.setActivityId(201);
@@ -103,13 +103,13 @@ public class RequestServiceImpl implements RequestService {
             requestStatus.setRequestStatusId(301);
             adminRequest.setRequestStatus(requestStatus);
             adminRequest.setUserComments("Kindly Approve My Vehicle.");
-            adminRequest.setVehicle(vehicle);
+            adminRequest.setVehicle(vehicle1);
             adminRequestDAO.save(adminRequest);
         } else {
             requestStatus.setRequestStatusId(302);
             adminRequest.setRequestStatus(requestStatus);
             adminRequest.setAdminComments("Approved as added by Admin");
-            adminRequest.setVehicle(vehicle);
+            adminRequest.setVehicle(vehicle1);
             adminRequestDAO.save(adminRequest);
         }
         return vehicle;

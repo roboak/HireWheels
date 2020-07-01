@@ -36,7 +36,7 @@ public class VehicleValidatorImpl implements VehicleValidator {
     @Override
     public void validateUser(int userId) {
         if (userId == 0){
-            throw new APIException("User Id cannot be empty or null");
+            throw new APIException("Not a Valid User Id");
         }
     }
 }

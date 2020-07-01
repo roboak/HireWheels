@@ -34,7 +34,7 @@ public class AdminController {
     public ResponseEntity getAllApprovals(@RequestParam("statusId") int statusId){
         ResponseEntity responseEntity = null;
         try {
-            adminValidator.validateApprovals(statusId);
+            adminValidator.validateGetAllApprovals(statusId);
             List<AdminRequestResponse> adminRequestList = adminService.getAllAdminRequest(statusId);
             responseEntity = ResponseEntity.ok(adminRequestList);
         } catch (GlobalExceptionHandler e) {

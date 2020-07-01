@@ -30,7 +30,7 @@ public class AuthenticationController{
     @Autowired
     UserValidator userValidator;
 
-    @PostMapping("/login")
+    @PostMapping("/users/access-token")
     public ResponseEntity userLogin(@RequestBody LoginDTO user){
         ResponseEntity responseEntity = null;
         UserDetailResponse userDetailResponse = new UserDetailResponse();
@@ -56,7 +56,7 @@ public class AuthenticationController{
         return responseEntity;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/users")
     public ResponseEntity userSignUp(@RequestBody UserDTO user) {
         ResponseEntity responseEntity = null;
         try {
@@ -73,7 +73,7 @@ public class AuthenticationController{
         return responseEntity;
     }
 
-    @PutMapping("/forgot-pwd")
+    @PutMapping("/users/access-token/password")
     public ResponseEntity changePassword(@RequestBody ForgetPWDDTO user) {
         ResponseEntity responseEntity = null;
         try {

@@ -14,31 +14,22 @@ public class AdminValidatorImpl implements AdminValidator{
     List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203,204));
 
     @Override
-    public void validateApprovals(int requestId) {
+    public void validateGetAllApprovals(int requestId) {
         if(!requestIds.contains(requestId)){
             throw new APIException("Not a Valid Request Id");
-        }
-        if(requestId == 0 || String.valueOf(requestId).length()<3 || String.valueOf(requestId).length()>3){
-            throw new APIException("Request Id cannot be null or empty and must be a three digit");
         }
     }
 
     @Override
     public void validateUpdateVehicleRequest(AdminActivityDTO vehicle, int vechileId) {
         if (vechileId == 0){
-            throw new APIException("Vehicle Id cannot be empty or null");
+            throw new APIException("Not a Valid Vehicle Id");
         }
-        if(!requestIds.contains(vehicle.getRequestStatusId())){
-            throw new APIException("Not a Valid Request Id");
+        if (!requestIds.contains(vehicle.getRequestStatusId())){
+            throw new APIException("Not a Valid Status Id");
         }
-        if(vehicle.getRequestStatusId() == 0 || String.valueOf(vehicle.getRequestStatusId()).length()<3 || String.valueOf(vehicle.getRequestStatusId()).length()>3){
-            throw new APIException("Request Id cannot be null or empty and must be a three digit");
-        }
-        if(!activityIds.contains(vehicle.getActivityId())){
+        if (!activityIds.contains(vehicle.getActivityId())) {
             throw new APIException("Not a Valid Activity Id");
-        }
-        if(vehicle.getActivityId() == 0 || String.valueOf(vehicle.getActivityId()).length()<3 || String.valueOf(vehicle.getActivityId()).length()>3){
-            throw new APIException("Activity Id cannot be null or empty and must be a three digit");
         }
     }
 }

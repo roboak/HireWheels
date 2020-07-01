@@ -18,19 +18,13 @@ public class RequestValidatorImpl implements RequestValidator {
     @Override
     public void validateChangeVehicleAvailability(AdminRequestDTO vehicle, int vehicleId) {
         if (vehicleId == 0){
-            throw new APIException("Vehicle Id cannot be empty or null");
+            throw new APIException("Not a Valid Vehicle Id");
         }
         if(!requestIds.contains(vehicle.getRequestStatusId())){
-            throw new APIException("Not a Valid Request Id");
-        }
-        if(vehicle.getRequestStatusId() == 0 || String.valueOf(vehicle.getRequestStatusId()).length()<3 || String.valueOf(vehicle.getRequestStatusId()).length()>3){
-            throw new APIException("Request Id cannot be null or empty and must be a three digit");
+            throw new APIException("Not a Valid Request Status Id");
         }
         if(!activityIds.contains(vehicle.getActivityId())){
             throw new APIException("Not a Valid Activity Id");
-        }
-        if(vehicle.getActivityId() == 0 || String.valueOf(vehicle.getActivityId()).length()<3 || String.valueOf(vehicle.getActivityId()).length()>3){
-            throw new APIException("Activity Id cannot be null or empty and must be a three digit");
         }
     }
 
@@ -43,25 +37,25 @@ public class RequestValidatorImpl implements RequestValidator {
             throw new APIException("Vehicle Model cannot be null or empty");
         }
         if (vehicleDTO.getVehicleSubCategoryId() == 0){
-            throw new APIException("Vehicle SubCategoryId cannot be empty or null");
+            throw new APIException("Not a Valid Sub-CategoryID");
         }
         if(vehicleDTO.getColor().isEmpty() || vehicleDTO.getColor() == null){
             throw new APIException("Color cannot be null or empty");
         }
         if (vehicleDTO.getCostPerHour() == 0){
-            throw new APIException("CostPerHour cannot be empty or null");
+            throw new APIException("Not a Valid CostPerHour");
         }
         if (vehicleDTO.getFuelTypeId() == 0){
-            throw new APIException("FuelType cannot be empty or null");
+            throw new APIException("Not a Valid FuelType");
         }
         if (vehicleDTO.getLocationId() == 0){
-            throw new APIException("LocationId cannot be empty or null");
+            throw new APIException("Not a Valid LocationId");
         }
         if (vehicleDTO.getCityId() == 0){
-            throw new APIException("CityId cannot be empty or null");
+            throw new APIException("Not a Valid CityId");
         }
         if(vehicleDTO.getUserId() == 0){
-            throw new APIException("userId cannot be null or empty");
+            throw new APIException("Not a Valid userId");
         }
         if(vehicleDTO.getCarImageUrl().isEmpty() || vehicleDTO.getCarImageUrl() == null){
             throw new APIException("CarImage URL cannot be null or empty");

@@ -25,19 +25,19 @@ public class BookingValidatorImpl implements BookingValidator {
         String formatDropOffDate = sdf.format(vehicle.getDropoffDate());
         Date parsedDropOffDate = sdf.parse(formatDropOffDate);
         if (vehicle.getUserId() == 0){
-            throw new APIException("UserId Id cannot be empty or null");
+            throw new APIException(" Not a Valid UserId Id");
         }
         if (vehicle.getVehicleId() == 0){
-            throw new APIException("Vehicle Id cannot be empty or null");
+            throw new APIException("Not a Valid Vehicle Id");
         }
         if (vehicle.getLocationId() == 0){
-            throw new APIException("Location Id cannot be empty or null");
+            throw new APIException("Not a Valid Location Id");
         }
         if (vehicle.getActivityId() == 0){
-            throw new APIException("Location Id cannot be empty or null");
+            throw new APIException("Not a Valid Location Id");
         }
         if (vehicle.getAmount() == 0){
-            throw new APIException("Amount cannot be empty or null");
+            throw new APIException("Not a Valid Amount");
         }
         if (todaysDate.compareTo(parsedBookingDate) != 0){
             throw new APIException("Booking date should be today's date");

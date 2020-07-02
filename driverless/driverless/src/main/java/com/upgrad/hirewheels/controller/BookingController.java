@@ -3,6 +3,7 @@ package com.upgrad.hirewheels.controller;
 import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
+import com.upgrad.hirewheels.responsemodel.BookingHistoryResponse;
 import com.upgrad.hirewheels.service.BookingService;
 import com.upgrad.hirewheels.validator.BookingValidator;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public class BookingController {
         ResponseEntity responseEntity = null;
         try {
              bookingValidator.validateBookingHistory(userId);
-             List<Booking> bookingList = bookingService.bookingHistory(userId);
+             List<BookingHistoryResponse> bookingList = bookingService.bookingHistory(userId);
              responseEntity = ResponseEntity.ok(bookingList);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());

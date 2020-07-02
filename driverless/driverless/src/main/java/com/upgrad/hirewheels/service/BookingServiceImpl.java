@@ -7,11 +7,14 @@ import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.dao.BookingDAO;
 import com.upgrad.hirewheels.entities.Users;
+import com.upgrad.hirewheels.entities.Vehicle;
 import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.responsemodel.BookingHistoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,9 +77,23 @@ public class BookingServiceImpl implements BookingService {
      */
 
     @Override
-    public List<Booking> bookingHistory(int userId) {
-        List<Booking> bookingHistoryList = userDAO.findById(userId).get().getBookingList();
-        return bookingHistoryList;
+    public List<BookingHistoryResponse> bookingHistory(int userId) {
+        List<BookingHistoryResponse> bookingHistoryResponseList = new ArrayList<>();
+        userDAO.findById(userId).get().getBookingList().forEach(a-> {
+            BookingHistoryResponse bookingHistoryResponse = new BookingHistoryResponse();
+            bookingHistoryResponse.setBookingId(a.getBookingId());
+            bookingHistoryResponse.setBookingDate(a.getBookingDate());
+            bookingHistoryResponse.setDropOffDate(a.getDropOffDate());
+            bookingHistoryResponse.setPickUpDate(a.getPickUpDate());
+            bookingHistoryResponse.setAmount(a.getAmount());
+            bookingHistoryResponse.setVehicleId(a.getVehicleWithBooking().getVehicleId());
+            bookingHistoryResponse.setVehicleNumber(a.getVehicleWithBooking().getVehicleNumber());
+            bookingHistoryResponse.setVehicleModel(a.getVehicleWithBooking().getVehicleModel());
+            bookingHistoryResponse.setLocationName(a.getLocationWithBooking().getLocationName());
+            bookingHistoryResponse.setCarImageUrl(a.getVehicleWithBooking().getCarImageUrl());
+            bookingHistoryResponseList.add(bookingHistoryResponse);
+        });
+        return bookingHistoryResponseList;
     }
 
 }

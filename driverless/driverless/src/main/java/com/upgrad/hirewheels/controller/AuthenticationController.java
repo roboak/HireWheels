@@ -48,7 +48,8 @@ public class AuthenticationController{
                     userDetailResponse.setSuccessMessage("User Successfully Logged In");
                     responseEntity = ResponseEntity.ok(userDetailResponse);
                 } else {
-                    throw new APIException("Invalid Credentials");
+                    CustomResponse response = new CustomResponse(new Date(), "User Unauthorized", 401);
+                    return new ResponseEntity(response, HttpStatus.UNAUTHORIZED);
                 }
             } catch (GlobalExceptionHandler e){
                 logger.error(e.getMessage());

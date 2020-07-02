@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 
 import java.text.ParseException;
 import java.util.Date;

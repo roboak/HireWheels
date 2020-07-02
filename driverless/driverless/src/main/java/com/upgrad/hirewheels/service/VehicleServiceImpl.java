@@ -66,25 +66,25 @@ public class VehicleServiceImpl implements VehicleService {
             throw new APIException("Invalid Vehicle Category Name");
         }
 
-        List<Integer> bookedVehicles = new ArrayList<>();
-        bookingDAO.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicles.add(a.getVehicleWithBooking().getVehicleId());});
+        List<Integer> bookedVehicleIdList = new ArrayList<>();
+        bookingDAO.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicleIdList.add(a.getVehicleWithBooking().getVehicleId());});
         List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
         for (Vehicle v : returnedVehicleList) {
             if (approvedVehicles.contains(v.getVehicleId())) {
-                if(!bookedVehicles.contains(v.getVehicleId())){
-                    VehicleDetailResponse y = new VehicleDetailResponse();
-                    y.setVehicleId(v.getVehicleId());
-                    y.setVehicleModel(v.getVehicleModel());
-                    y.setVehicleOwnerId(v.getUser().getUserId());
-                    y.setVehicleOwnerName(v.getUser().getFirstName());
-                    y.setVehicleNumber(v.getVehicleNumber());
-                    y.setColor(v.getColor());
-                    y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
-                    y.setFuelType(v.getFuelType().getFuelType());
-                    y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                    y.setCarImageUrl(v.getCarImageUrl());
-                    mapVehicle.add(y);
+                if(!bookedVehicleIdList.contains(v.getVehicleId())){
+                    VehicleDetailResponse vehicleDetailResponse = new VehicleDetailResponse();
+                    vehicleDetailResponse.setVehicleId(v.getVehicleId());
+                    vehicleDetailResponse.setVehicleModel(v.getVehicleModel());
+                    vehicleDetailResponse.setVehicleOwnerId(v.getUser().getUserId());
+                    vehicleDetailResponse.setVehicleOwnerName(v.getUser().getFirstName());
+                    vehicleDetailResponse.setVehicleNumber(v.getVehicleNumber());
+                    vehicleDetailResponse.setColor(v.getColor());
+                    vehicleDetailResponse.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
+                    vehicleDetailResponse.setFuelType(v.getFuelType().getFuelType());
+                    vehicleDetailResponse.setLocationId(v.getLocationWithVehicle().getLocationId());
+                    vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
+                    mapVehicle.add(vehicleDetailResponse);
                 }
             }
         }
@@ -106,20 +106,20 @@ public class VehicleServiceImpl implements VehicleService {
             returnedVehicleList = vehicleDAO.findAll();
         }
         for (Vehicle v : returnedVehicleList) {
-                VehicleDetailResponse y = new VehicleDetailResponse();
-                y.setVehicleId(v.getVehicleId());
-                y.setVehicleModel(v.getVehicleModel());
-                y.setVehicleOwnerId(v.getUser().getUserId());
-                y.setVehicleNumber(v.getVehicleNumber());
-                y.setVehicleOwnerName(v.getUser().getFirstName());
-                y.setColor(v.getColor());
-                y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
-                y.setFuelType(v.getFuelType().getFuelType());
-                y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                y.setCarImageUrl(v.getCarImageUrl());
-                y.setActivityId(v.getAdminRequest().getActivity().getActivityId());
-                y.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
-                mapVehicle.add(y);
+                VehicleDetailResponse vehicleDetailResponse = new VehicleDetailResponse();
+                vehicleDetailResponse.setVehicleId(v.getVehicleId());
+                vehicleDetailResponse.setVehicleModel(v.getVehicleModel());
+                vehicleDetailResponse.setVehicleOwnerId(v.getUser().getUserId());
+                vehicleDetailResponse.setVehicleNumber(v.getVehicleNumber());
+                vehicleDetailResponse.setVehicleOwnerName(v.getUser().getFirstName());
+                vehicleDetailResponse.setColor(v.getColor());
+                vehicleDetailResponse.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
+                vehicleDetailResponse.setFuelType(v.getFuelType().getFuelType());
+                vehicleDetailResponse.setLocationId(v.getLocationWithVehicle().getLocationId());
+                vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
+                vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
+                vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                mapVehicle.add(vehicleDetailResponse);
         }
         return mapVehicle;
     }

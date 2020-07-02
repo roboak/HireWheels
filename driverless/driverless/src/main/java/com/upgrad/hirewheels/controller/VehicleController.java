@@ -1,7 +1,7 @@
 package com.upgrad.hirewheels.controller;
 
 
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 import com.upgrad.hirewheels.service.UserService;
 import com.upgrad.hirewheels.service.VehicleService;

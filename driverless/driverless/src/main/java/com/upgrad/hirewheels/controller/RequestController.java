@@ -2,7 +2,7 @@ package com.upgrad.hirewheels.controller;
 
 import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.dto.AdminRequestDTO;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.RequestService;
 import com.upgrad.hirewheels.validator.RequestValidator;

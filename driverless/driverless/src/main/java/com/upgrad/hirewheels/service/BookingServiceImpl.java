@@ -60,8 +60,8 @@ public class BookingServiceImpl implements BookingService {
         } else {
             booking.setVehicleWithBooking(vehicleDAO.findById(bookingDTO.getVehicleId()).get());
         }
-        Booking returnResponse = bookingDAO.save(booking);
-        return returnResponse;
+        Booking savedBooking = bookingDAO.save(booking);
+        return savedBooking;
     }
 
 }

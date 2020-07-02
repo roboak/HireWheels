@@ -2,7 +2,7 @@ package com.upgrad.hirewheels.service;
 
 import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.entities.Users;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 
 
 public interface UserService{

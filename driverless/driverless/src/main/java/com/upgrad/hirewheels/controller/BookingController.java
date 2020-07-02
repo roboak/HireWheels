@@ -2,7 +2,7 @@ package com.upgrad.hirewheels.controller;
 
 import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.service.BookingService;
 import com.upgrad.hirewheels.validator.BookingValidator;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/bookings")
 public class BookingController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class BookingController {
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
     @PostMapping("/bookVehicle")
-    public ResponseEntity booking(@RequestBody BookingDTO vehicle) {
+    public ResponseEntity addBooking(@RequestBody BookingDTO vehicle) {
         ResponseEntity responseEntity = null;
         try {
             bookingValidator.validateBooking(vehicle);

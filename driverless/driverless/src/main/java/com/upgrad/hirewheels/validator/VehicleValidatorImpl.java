@@ -1,7 +1,6 @@
 package com.upgrad.hirewheels.validator;
 
 import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;

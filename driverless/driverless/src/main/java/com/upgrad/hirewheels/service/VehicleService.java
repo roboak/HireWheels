@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 
 import java.util.Date;

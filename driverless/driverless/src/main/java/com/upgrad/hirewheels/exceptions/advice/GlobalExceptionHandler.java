@@ -1,6 +1,8 @@
-package com.upgrad.hirewheels.exceptions;
+package com.upgrad.hirewheels.exceptions.advice;
 
 
+import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.UserNotFoundException;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,7 @@ public class GlobalExceptionHandler extends Exception{
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<Object> handleUserNotFoundException(APIException ex) {
+    public ResponseEntity<Object> handleAPIException(APIException ex) {
         return error(BAD_REQUEST, ex);
     }
 

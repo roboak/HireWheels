@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
@@ -37,4 +38,19 @@ public class BookingController {
         }
         return responseEntity;
     }
+
+    @GetMapping("/{userId}/history")
+    public ResponseEntity bookingHistory(@PathVariable("userId") int userId) {
+        ResponseEntity responseEntity = null;
+        try {
+             bookingValidator.validateBookingHistory(userId);
+             List<Booking> bookingList = bookingService.bookingHistory(userId);
+             responseEntity = ResponseEntity.ok(bookingList);
+        } catch (GlobalExceptionHandler e){
+            logger.error(e.getMessage());
+        }
+        return responseEntity;
+    }
+
+
 }

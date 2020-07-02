@@ -1,5 +1,4 @@
 package com.upgrad.hirewheels.entities;
-
 import lombok.Data;
 
 import javax.persistence.*;

@@ -6,4 +6,5 @@ import java.text.ParseException;
 
 public interface BookingValidator {
     void validateBooking(BookingDTO vehicle) throws ParseException;
+    void validateBookingHistory(int userId);
 }

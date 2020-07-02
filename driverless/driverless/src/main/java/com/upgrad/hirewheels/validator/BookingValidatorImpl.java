@@ -49,4 +49,11 @@ public class BookingValidatorImpl implements BookingValidator {
             throw new APIException("PickUpDate should not be less than today's date");
         }
     }
+
+    @Override
+    public void validateBookingHistory(int userId) {
+        if (userId == 0){
+            throw new APIException(" Not a Valid UserId Id");
+        }
+    }
 }

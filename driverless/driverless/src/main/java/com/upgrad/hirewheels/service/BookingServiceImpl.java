@@ -11,6 +11,9 @@ import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
+import java.util.List;
+
 @Service
 public class BookingServiceImpl implements BookingService {
 
@@ -62,6 +65,18 @@ public class BookingServiceImpl implements BookingService {
         }
         Booking savedBooking = bookingDAO.save(booking);
         return savedBooking;
+    }
+
+    /**
+     * Returns the booking history of user
+     * @param userId
+     * @return
+     */
+
+    @Override
+    public List<Booking> bookingHistory(int userId) {
+        List<Booking> bookingHistoryList = userDAO.findById(userId).get().getBookingList();
+        return bookingHistoryList;
     }
 
 }

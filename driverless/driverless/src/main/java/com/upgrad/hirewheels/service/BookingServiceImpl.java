@@ -6,6 +6,7 @@ import com.upgrad.hirewheels.dao.VehicleDAO;
 import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.dao.BookingDAO;
+import com.upgrad.hirewheels.entities.Users;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,27 +33,34 @@ public class BookingServiceImpl implements BookingService {
      */
 
     public Booking addBooking(BookingDTO bookingDTO){
-        Booking booking1 = new Booking();
-        booking1.setAmount(bookingDTO.getAmount());
-        booking1.setBookingDate(bookingDTO.getBookingDate());
-        booking1.setPickUpDate(bookingDTO.getPickupDate());
-        booking1.setDropOffDate(bookingDTO.getDropoffDate());
+        Booking booking = new Booking();
+        booking.setAmount(bookingDTO.getAmount());
+        booking.setBookingDate(bookingDTO.getBookingDate());
+        booking.setPickUpDate(bookingDTO.getPickupDate());
+        booking.setDropOffDate(bookingDTO.getDropoffDate());
         if (userDAO.findById(bookingDTO.getUserId()).get() == null){
             throw new APIException("Invalid User Id for Booking");
         } else {
-            booking1.setBookingWithUser(userDAO.findById(bookingDTO.getUserId()).get());
+            booking.setBookingWithUser(userDAO.findById(bookingDTO.getUserId()).get());
+            Users user = userDAO.findById(bookingDTO.getUserId()).get();
+            if (user.getWalletMoney() < bookingDTO.getAmount()) {
+                throw new APIException("InSufficient Balance. Please Check With Admin.");
+            } else {
+                user.setWalletMoney(user.getWalletMoney() - bookingDTO.getAmount());
+                userDAO.save(user);
+            }
         }
         if (locationDAO.findById(bookingDTO.getLocationId()).get() == null){
             throw new APIException("Invalid Location Id for Booking");
         } else {
-            booking1.setLocationWithBooking(locationDAO.findById(bookingDTO.getLocationId()).get());
+            booking.setLocationWithBooking(locationDAO.findById(bookingDTO.getLocationId()).get());
         }
         if (vehicleDAO.findById(bookingDTO.getVehicleId()).get() == null){
             throw new APIException("Invalid Vehicle Id for Booking");
         } else {
-            booking1.setVehicleWithBooking(vehicleDAO.findById(bookingDTO.getVehicleId()).get());
+            booking.setVehicleWithBooking(vehicleDAO.findById(bookingDTO.getVehicleId()).get());
         }
-        Booking returnResponse = bookingDAO.save(booking1);
+        Booking returnResponse = bookingDAO.save(booking);
         return returnResponse;
     }
 

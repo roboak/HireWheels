@@ -21,14 +21,17 @@ public class AdminValidatorImpl implements AdminValidator{
     }
 
     @Override
-    public void validateUpdateVehicleRequest(AdminActivityDTO vehicle, int vechileId) {
+    public void validateUpdateVehicleRequest(AdminActivityDTO adminActivityDTO, int vechileId) {
+        if (adminActivityDTO.getUserId() != 1){
+            throw new APIException("Only Admin Can Update Requests");
+        }
         if (vechileId == 0){
             throw new APIException("Not a Valid Vehicle Id");
         }
-        if (!requestIds.contains(vehicle.getRequestStatusId())){
+        if (!requestIds.contains(adminActivityDTO.getRequestStatusId())){
             throw new APIException("Not a Valid Status Id");
         }
-        if (!activityIds.contains(vehicle.getActivityId())) {
+        if (!activityIds.contains(adminActivityDTO.getActivityId())) {
             throw new APIException("Not a Valid Activity Id");
         }
     }

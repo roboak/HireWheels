@@ -4,7 +4,7 @@ package com.upgrad.hirewheels.controller;
 import com.upgrad.hirewheels.dto.AdminActivityDTO;
 import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.AdminRequestResponse;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.AdminService;
 import com.upgrad.hirewheels.validator.AdminValidator;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class AdminController {
         try {
             adminValidator.validateUpdateVehicleRequest(vehicle, vehicleId);
             adminService.updateRequest(vehicle, vehicleId);
-            SuccessResponse response = new SuccessResponse(new Date(), "Request Updated Success.",200);
+            CustomResponse response = new CustomResponse(new Date(), "Request Updated Success.",200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());

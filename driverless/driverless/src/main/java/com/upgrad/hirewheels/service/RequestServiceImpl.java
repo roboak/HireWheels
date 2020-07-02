@@ -31,13 +31,13 @@ public class RequestServiceImpl implements RequestService {
 
     public AdminRequest changeAvailabilityRequest(AdminRequestDTO requestDTO, int vehicleId) {
         AdminRequest returnedVehicle = vehicleDAO.findById(vehicleId).get().getAdminRequest();
-        if( returnedVehicle == null){
+        if(returnedVehicle == null){
             throw new APIException("Invalid Vehicle Id");
         }
         /**
          * To OptOut, vehicle must be in OptIn or Registered State with Approved Status
          */
-        if (requestDTO.getRequestStatusId() == 203){
+        if ( returnedVehicle.getRequestStatus().getRequestStatusId() == 203){
             if(returnedVehicle.getRequestStatus().getRequestStatusId() != 202 || returnedVehicle.getRequestStatus().getRequestStatusId() != 201
                     && returnedVehicle.getActivity().getActivityId() != 302)
             {
@@ -47,7 +47,7 @@ public class RequestServiceImpl implements RequestService {
         /**
          * To OptIn, vehicle must be in OptOut State with Approved Status
          */
-        if (requestDTO.getRequestStatusId() == 202){
+        if (returnedVehicle.getRequestStatus().getRequestStatusId() == 202){
             if(returnedVehicle.getRequestStatus().getRequestStatusId() != 203 && returnedVehicle.getActivity().getActivityId() != 302)
             {
                 throw new APIException("OPT_IN Action Not Allowed");
@@ -57,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
         activity.setActivityId(requestDTO.getActivityId());
         returnedVehicle.setActivity(activity);
         RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setRequestStatusId(requestDTO.getRequestStatusId());
+        requestStatus.setRequestStatusId(301);
         returnedVehicle.setRequestStatus(requestStatus);
         returnedVehicle.setUserComments(requestDTO.getAdminComments());
         adminRequestDAO.save(returnedVehicle);

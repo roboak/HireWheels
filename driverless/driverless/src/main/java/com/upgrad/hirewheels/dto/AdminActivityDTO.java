@@ -8,4 +8,5 @@ public class AdminActivityDTO {
     int requestStatusId;
     String userComments;
     String adminComments;
+    int userId;
 }

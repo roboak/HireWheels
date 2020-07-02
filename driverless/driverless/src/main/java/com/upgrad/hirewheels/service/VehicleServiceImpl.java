@@ -76,7 +76,8 @@ public class VehicleServiceImpl implements VehicleService {
                     VehicleDetailResponse y = new VehicleDetailResponse();
                     y.setVehicleId(v.getVehicleId());
                     y.setVehicleModel(v.getVehicleModel());
-                    y.setVehicleOwner(v.getUser().getUserId());
+                    y.setVehicleOwnerId(v.getUser().getUserId());
+                    y.setVehicleOwnerName(v.getUser().getFirstName());
                     y.setVehicleNumber(v.getVehicleNumber());
                     y.setColor(v.getColor());
                     y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
@@ -98,17 +99,19 @@ public class VehicleServiceImpl implements VehicleService {
 
     public List<VehicleDetailResponse> getAllVehicleByUserId(int userId) {
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
-        List<Vehicle> returnedVehicleList = userDAO.findById(userId).get().getVehiclesList();
-        if (returnedVehicleList == null){
-            throw new APIException("Invalid UserId");
-
+        List<Vehicle> returnedVehicleList;
+        if (userId != 1){
+            returnedVehicleList = userDAO.findById(userId).get().getVehiclesList();
+        } else {
+            returnedVehicleList = vehicleDAO.findAll();
         }
         for (Vehicle v : returnedVehicleList) {
                 VehicleDetailResponse y = new VehicleDetailResponse();
                 y.setVehicleId(v.getVehicleId());
                 y.setVehicleModel(v.getVehicleModel());
-                y.setVehicleOwner(v.getUser().getUserId());
+                y.setVehicleOwnerId(v.getUser().getUserId());
                 y.setVehicleNumber(v.getVehicleNumber());
+                y.setVehicleOwnerName(v.getUser().getFirstName());
                 y.setColor(v.getColor());
                 y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
                 y.setFuelType(v.getFuelType().getFuelType());

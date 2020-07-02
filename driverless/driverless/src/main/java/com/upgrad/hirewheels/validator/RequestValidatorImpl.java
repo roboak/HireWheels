@@ -12,18 +12,17 @@ import java.util.List;
 @Service
 public class RequestValidatorImpl implements RequestValidator {
 
-    List<Integer> requestIds = new ArrayList<>(Arrays.asList(301,302,303));
     List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
 
     @Override
-    public void validateChangeVehicleAvailability(AdminRequestDTO vehicle, int vehicleId) {
+    public void validateChangeVehicleAvailability(AdminRequestDTO adminRequestDTO, int vehicleId) {
         if (vehicleId == 0){
             throw new APIException("Not a Valid Vehicle Id");
         }
-        if(!requestIds.contains(vehicle.getRequestStatusId())){
-            throw new APIException("Not a Valid Request Status Id");
+        if (adminRequestDTO.getUserId() == 0){
+            throw new APIException("Not a Valid User Id");
         }
-        if(!activityIds.contains(vehicle.getActivityId())){
+        if(!activityIds.contains(adminRequestDTO.getActivityId())){
             throw new APIException("Not a Valid Activity Id");
         }
     }

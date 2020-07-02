@@ -1,7 +1,7 @@
 package com.upgrad.hirewheels.exceptions;
 
 
-import com.upgrad.hirewheels.responsemodel.ExceptionResponse;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,8 +43,8 @@ public class GlobalExceptionHandler extends Exception{
 
     private ResponseEntity error(HttpStatus status, Exception ex) {
         logger.error("Exception : ", ex);
-        ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), ex.getMessage(), status.value());
-        return new ResponseEntity(exceptionResponse, status);
+        CustomResponse customResponse = new CustomResponse(new Date(), ex.getMessage(), status.value());
+        return new ResponseEntity(customResponse, status);
     }
 
 }

@@ -3,7 +3,7 @@ package com.upgrad.hirewheels.controller;
 import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.dto.AdminRequestDTO;
 import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.RequestService;
 import com.upgrad.hirewheels.validator.RequestValidator;
 import org.slf4j.Logger;
@@ -28,12 +28,18 @@ public class RequestController {
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
     @PutMapping("/{vehicleId}")
-    public ResponseEntity changeVehicleAvailability(@RequestBody AdminRequestDTO vehicle, @PathVariable int vehicleId) {
+    public ResponseEntity changeVehicleAvailability(@RequestBody AdminRequestDTO adminRequestDTO, @PathVariable int vehicleId) {
         ResponseEntity responseEntity = null;
         try{
-            requestValidator.validateChangeVehicleAvailability(vehicle, vehicleId);
-            requestService.changeAvailabilityRequest(vehicle, vehicleId);
-            SuccessResponse response = new SuccessResponse(new Date(), "Request successful. Kindly wait for Admin to approve.", 200);
+            requestValidator.validateChangeVehicleAvailability(adminRequestDTO, vehicleId);
+            requestService.changeAvailabilityRequest(adminRequestDTO, vehicleId);
+            String message = null;
+                if (adminRequestDTO.getUserId() != 1){
+                    message = "Request Successful. Kindly wait for Admin to approve.";
+                } else {
+                    message = "Request Successful.";
+                }
+            CustomResponse response = new CustomResponse(new Date(), message, 200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());
@@ -53,7 +59,7 @@ public class RequestController {
             } else {
                 message = "Vehicle Added Successfully.";
             }
-            SuccessResponse response = new SuccessResponse(new Date(), message, 200);
+            CustomResponse response = new CustomResponse(new Date(), message, 200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());

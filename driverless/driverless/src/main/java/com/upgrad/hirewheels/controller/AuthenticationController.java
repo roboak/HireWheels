@@ -5,7 +5,7 @@ import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.responsemodel.UserDetailResponse;
 import com.upgrad.hirewheels.entities.Users;
 import com.upgrad.hirewheels.service.UserService;
@@ -63,7 +63,7 @@ public class AuthenticationController{
             userValidator.validateUserSignUp(user);
             Users functionReturn = userService.createUser(user);
             if (functionReturn != null) {
-                SuccessResponse response = new SuccessResponse(new Date(), "User Successfully Signed Up", 200);
+                CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
                 responseEntity = new ResponseEntity(response, HttpStatus.OK);
             }
         }
@@ -80,7 +80,7 @@ public class AuthenticationController{
             userValidator.validateChangePassword(user);
             boolean functionReturn = userService.updatePassword(user.getEmail(), user.getMobileNo(), user.getPassword());
             if (functionReturn == true) {
-                SuccessResponse response = new SuccessResponse(new Date(), "Password Successfully Changed", 200);
+                CustomResponse response = new CustomResponse(new Date(), "Password Successfully Changed", 200);
                 return new ResponseEntity(response, HttpStatus.OK);
             }
         } catch (GlobalExceptionHandler e){

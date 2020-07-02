@@ -12,6 +12,5 @@ public class UserDetailResponse {
     String mobileNumber;
     int walletMoney;
     String successMessage;
-    String errorMessage;
     String roleName;
 }

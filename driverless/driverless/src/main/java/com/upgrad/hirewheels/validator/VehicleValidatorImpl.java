@@ -22,7 +22,7 @@ public class VehicleValidatorImpl implements VehicleValidator {
             throw new APIException("Category Name cannot be null or empty");
         }
         if (locationId == 0){
-            throw new APIException("Location Id cannot be empty or null");
+            throw new APIException("Location Id can't be empty");
         }
         if (todaysDate.compareTo(parsedDropOffDate) != -1 || parsedPickUpDate.compareTo(parsedDropOffDate) != -1){
             throw new APIException("DropDate should be greater than today's date and greater than PickUp Date");

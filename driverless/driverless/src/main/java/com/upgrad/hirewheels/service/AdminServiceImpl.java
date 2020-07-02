@@ -1,5 +1,6 @@
 package com.upgrad.hirewheels.service;
 
+import com.upgrad.hirewheels.dao.ActivityDAO;
 import com.upgrad.hirewheels.dao.VehicleDAO;
 import com.upgrad.hirewheels.dto.AdminActivityDTO;
 import com.upgrad.hirewheels.entities.Activity;
@@ -26,6 +27,10 @@ public class AdminServiceImpl implements AdminService{
 
     @Autowired
     VehicleDAO vehicleDAO;
+
+    @Autowired
+    ActivityDAO activityDAO;
+
 
     /**
      * Returns all the admin requests for approvals requested by User
@@ -61,14 +66,9 @@ public class AdminServiceImpl implements AdminService{
 
     public Boolean updateRequest(AdminActivityDTO adminActivityDTO, int requestId) {
         AdminRequest adminRequest = adminRequestDAO.findById(requestId).get();
-        if( adminRequest == null){
-            throw new APIException("Invalid Request Id");
-        }
-        Activity activity = new Activity();
-        activity.setActivityId(adminActivityDTO.getActivityId());
+        Activity activity = activityDAO.findById(adminActivityDTO.getActivityId()).get();
         adminRequest.setActivity(activity);
-        RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setRequestStatusId(requestId);
+        RequestStatus requestStatus = requestStatusDAO.findByRequestStatusId(adminActivityDTO.getRequestStatusId());
         adminRequest.setRequestStatus(requestStatus);
         adminRequest.setAdminComments(adminActivityDTO.getAdminComments());
         adminRequestDAO.save(adminRequest);

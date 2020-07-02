@@ -36,7 +36,7 @@ public class UserValidatorImpl implements UserValidator {
         if (!validator.isValid(user.getEmail())){
                         throw new APIException("Email Id Validation Error");
         }
-        if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10){
+        if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10 || user.getMobileNo().length()>10){
             throw new APIException("Mobile Number cannot be null or empty and must be 10 digits");
         }
     }
@@ -48,7 +48,7 @@ public class UserValidatorImpl implements UserValidator {
             throw new APIException("Password cannot be null or empty or less than 5 characters");
         }else if (!validator.isValid(user.getEmail())){
             throw new APIException("Email Id Validation Error");
-        }else if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10){
+        }else if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10 || user.getMobileNo().length()>10){
             throw new APIException("Mobile Number cannot be null or empty and must be 10 digits");
         }
     }

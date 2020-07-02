@@ -1,14 +1,15 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.LocationDAO;
-import com.upgrad.hirewheels.dao.VehicleDAO;
+import com.upgrad.hirewheels.dao.*;
 import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.dto.AdminRequestDTO;
 import com.upgrad.hirewheels.entities.*;
-import com.upgrad.hirewheels.dao.AdminRequestDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RequestServiceImpl implements RequestService {
@@ -22,23 +23,29 @@ public class RequestServiceImpl implements RequestService {
     @Autowired
     LocationDAO locationDAO;
 
+    @Autowired
+    UserDAO userDAO;
+
+    @Autowired
+    ActivityDAO activityDAO;
+
+    @Autowired
+    RequestStatusDAO requestStatusDAO;
+
     /**
      * Helps User to OptIn/OptOut of their registered vehicle.
-     * @param requestDTO
+     * @param adminRequestDTO
      * @param vehicleId
      * @return
      */
 
-    public AdminRequest changeAvailabilityRequest(AdminRequestDTO requestDTO, int vehicleId) {
+    public AdminRequest changeAvailabilityRequest(AdminRequestDTO adminRequestDTO, int vehicleId) {
         AdminRequest adminRequest = vehicleDAO.findById(vehicleId).get().getAdminRequest();
-        if(adminRequest == null){
-            throw new APIException("Invalid Vehicle Id");
-        }
         /**
          * To OptOut, vehicle must be in OptIn or Registered State with Approved Status
          */
-        if ( adminRequest.getActivity().getActivityId() == 203){
-            if(adminRequest.getActivity().getActivityId() != 202 || adminRequest.getActivity().getActivityId() != 201
+        if ( adminRequestDTO.getActivityId() == 203){
+            if(adminRequest.getActivity().getActivityId() != 202 && adminRequest.getRequestStatus().getRequestStatusId() != 302 || adminRequest.getActivity().getActivityId() != 201
                     && adminRequest.getRequestStatus().getRequestStatusId() != 302)
             {
                 throw new APIException("Invalid OPT_OUT Request");
@@ -47,23 +54,24 @@ public class RequestServiceImpl implements RequestService {
         /**
          * To OptIn, vehicle must be in OptOut State with Approved Status
          */
-        if (adminRequest.getActivity().getActivityId() == 202){
-            if(adminRequest.getActivity().getActivityId() != 203 && adminRequest.getRequestStatus().getRequestStatusId() != 302)
+        if ( adminRequestDTO.getActivityId() == 202) {
+            System.out.println(adminRequest.getActivity().getActivityId());
+            System.out.println(adminRequest.getRequestStatus().getRequestStatusId());
+            if(adminRequest.getActivity().getActivityId() != 203 && adminRequest.getRequestStatus().getRequestStatusId() != 302 || adminRequest.getActivity().getActivityId() != 201 && adminRequest.getRequestStatus().getRequestStatusId() != 302)
             {
                 throw new APIException("OPT_IN Action Not Allowed");
             }
         }
-        Activity activity = new Activity();
-        activity.setActivityId(requestDTO.getActivityId());
+        Activity activity = activityDAO.findById(adminRequestDTO.getActivityId()).get();
         adminRequest.setActivity(activity);
-        RequestStatus requestStatus = new RequestStatus();
-        if(requestDTO.getUserId() != 1){
-            requestStatus.setRequestStatusId(302);
+        RequestStatus requestStatus;
+        if(adminRequestDTO.getUserId() != 1){
+            requestStatus =  requestStatusDAO.findByRequestStatusId(301);
         } else {
-            requestStatus.setRequestStatusId(302);
+            requestStatus =  requestStatusDAO.findByRequestStatusId(302);
         }
         adminRequest.setRequestStatus(requestStatus);
-        adminRequest.setUserComments(requestDTO.getUserComments());
+        adminRequest.setUserComments(adminRequestDTO.getUserComments());
         adminRequestDAO.save(adminRequest);
         return adminRequest;
     }
@@ -88,29 +96,24 @@ public class RequestServiceImpl implements RequestService {
         fuelType.setFuelTypeId(vehicleDTO.getFuelTypeId());
         vehicle.setFuelType(fuelType);
         vehicle.setCarImageUrl(vehicleDTO.getCarImageUrl());
-        if (locationDAO.findById(vehicleDTO.getLocationId()).get() == null){
-            throw new APIException("Invalid Location Id for Vehicle");
-        } else {
-            Location location = locationDAO.findById(vehicleDTO.getLocationId()).get();
-            vehicle.setLocationWithVehicle(location);
-        }
+        Location location = locationDAO.findById(vehicleDTO.getLocationId()).get();
+        vehicle.setLocationWithVehicle(location);
         VehicleSubCategory vehicleSubCategory = new VehicleSubCategory();
         vehicleSubCategory.setVehicleSubCategoryId(vehicleDTO.getVehicleSubCategoryId());
         vehicle.setVehicleSubCategory(vehicleSubCategory);
         Vehicle vehicle1 = vehicleDAO.save(vehicle);
-        Activity activity = new Activity();
-        RequestStatus requestStatus = new RequestStatus();
-        activity.setActivityId(201);
+        Activity activity = activityDAO.findById(201).get();
         adminRequest.setActivity(activity);
+        RequestStatus requestStatus;
         adminRequest.setUser(user);
         if (vehicleDTO.getUserId() != 1) {
-            requestStatus.setRequestStatusId(301);
+            requestStatus =  requestStatusDAO.findByRequestStatusId(301);
             adminRequest.setRequestStatus(requestStatus);
-            adminRequest.setUserComments(vehicleDTO.getUserComment());
+            adminRequest.setUserComments(vehicleDTO.getUserComments());
             adminRequest.setVehicle(vehicle1);
             adminRequestDAO.save(adminRequest);
         } else {
-            requestStatus.setRequestStatusId(302);
+            requestStatus =  requestStatusDAO.findByRequestStatusId(302);
             adminRequest.setRequestStatus(requestStatus);
             adminRequest.setAdminComments("Approved as added by Admin");
             adminRequest.setVehicle(vehicle1);

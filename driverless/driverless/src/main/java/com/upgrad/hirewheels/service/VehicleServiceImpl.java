@@ -56,16 +56,11 @@ public class VehicleServiceImpl implements VehicleService {
 
     public List<VehicleDetailResponse> getAvailableVehicles(String categoryName, Date pickUpDate,Date dropDate, int locationId) {
         List<Vehicle> returnedVehicleList = new ArrayList<>();
-        if(vehicleCategoryDAO.findByVehicleCategoryName(categoryName) != null){
             vehicleCategoryDAO.findByVehicleCategoryName(categoryName).getVehicleSubCategoriesList().forEach(a-> a.getVehicleList().forEach(b-> {
                 if (b.getLocationWithVehicle().getLocationId() == locationId) {
                     returnedVehicleList.add(b);
                 }
             }));
-        } else {
-            throw new APIException("Invalid Vehicle Category Name");
-        }
-
         List<Integer> bookedVehicleIdList = new ArrayList<>();
         bookingDAO.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicleIdList.add(a.getVehicleWithBooking().getVehicleId());});
         List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
@@ -84,6 +79,8 @@ public class VehicleServiceImpl implements VehicleService {
                     vehicleDetailResponse.setFuelType(v.getFuelType().getFuelType());
                     vehicleDetailResponse.setLocationId(v.getLocationWithVehicle().getLocationId());
                     vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
+                    vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
+                    vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
                     mapVehicle.add(vehicleDetailResponse);
                 }
             }

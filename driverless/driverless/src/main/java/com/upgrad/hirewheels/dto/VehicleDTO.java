@@ -11,6 +11,6 @@ public class VehicleDTO {
      int fuelTypeId;
      int locationId;
      String carImageUrl;
-     String userComment;
+     String userComments;
      int userId;
 }

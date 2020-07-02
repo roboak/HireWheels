@@ -17,10 +17,10 @@ public class RequestValidatorImpl implements RequestValidator {
     @Override
     public void validateChangeVehicleAvailability(AdminRequestDTO adminRequestDTO, int vehicleId) {
         if (vehicleId == 0){
-            throw new APIException("Not a Valid Vehicle Id");
+            throw new APIException("Vehicle Id can't be empty");
         }
         if (adminRequestDTO.getUserId() == 0){
-            throw new APIException("Not a Valid User Id");
+            throw new APIException("User Id can't be empty");
         }
         if(!activityIds.contains(adminRequestDTO.getActivityId())){
             throw new APIException("Not a Valid Activity Id");
@@ -36,25 +36,19 @@ public class RequestValidatorImpl implements RequestValidator {
             throw new APIException("Vehicle Model cannot be null or empty");
         }
         if (vehicleDTO.getVehicleSubCategoryId() == 0){
-            throw new APIException("Not a Valid Sub-CategoryID");
+            throw new APIException("Sub-CategoryID can't be empty");
         }
         if(vehicleDTO.getColor().isEmpty() || vehicleDTO.getColor() == null){
             throw new APIException("Color cannot be null or empty");
         }
-        if (vehicleDTO.getCostPerHour() == 0){
-            throw new APIException("Not a Valid CostPerHour");
-        }
         if (vehicleDTO.getFuelTypeId() == 0){
-            throw new APIException("Not a Valid FuelType");
+            throw new APIException("FuelType can't be empty");
         }
         if (vehicleDTO.getLocationId() == 0){
-            throw new APIException("Not a Valid LocationId");
-        }
-        if (vehicleDTO.getCityId() == 0){
-            throw new APIException("Not a Valid CityId");
+            throw new APIException("LocationId can't be empty");
         }
         if(vehicleDTO.getUserId() == 0){
-            throw new APIException("Not a Valid userId");
+            throw new APIException("User Id can't be empty");
         }
         if(vehicleDTO.getCarImageUrl().isEmpty() || vehicleDTO.getCarImageUrl() == null){
             throw new APIException("CarImage URL cannot be null or empty");

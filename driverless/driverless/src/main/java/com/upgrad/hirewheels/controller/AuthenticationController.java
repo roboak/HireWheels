@@ -31,12 +31,12 @@ public class AuthenticationController{
     UserValidator userValidator;
 
     @PostMapping("/users/access-token")
-    public ResponseEntity userLogin(@RequestBody LoginDTO user){
+    public ResponseEntity userLogin(@RequestBody LoginDTO loginDTO){
         ResponseEntity responseEntity = null;
         UserDetailResponse userDetailResponse = new UserDetailResponse();
             try {
-                userValidator.validateuserLogin(user);
-                Users userDetail = userService.getUserDetails(user.getEmail(), user.getPassword());
+                userValidator.validateuserLogin(loginDTO);
+                Users userDetail = userService.getUserDetails(loginDTO);
                 if (userDetail != null) {
                     userDetailResponse.setUserId(userDetail.getUserId());
                     userDetailResponse.setFirstName(userDetail.getFirstName());
@@ -58,11 +58,11 @@ public class AuthenticationController{
     }
 
     @PostMapping("/users")
-    public ResponseEntity userSignUp(@RequestBody UserDTO user) {
+    public ResponseEntity userSignUp(@RequestBody UserDTO userDTO) {
         ResponseEntity responseEntity = null;
         try {
-            userValidator.validateUserSignUp(user);
-            Users functionReturn = userService.createUser(user);
+            userValidator.validateUserSignUp(userDTO);
+            Users functionReturn = userService.createUser(userDTO);
             if (functionReturn != null) {
                 CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
                 responseEntity = new ResponseEntity(response, HttpStatus.OK);
@@ -75,11 +75,11 @@ public class AuthenticationController{
     }
 
     @PutMapping("/users/access-token/password")
-    public ResponseEntity changePassword(@RequestBody ForgetPWDDTO user) {
+    public ResponseEntity changePassword(@RequestBody ForgetPWDDTO forgetPWDDTO) {
         ResponseEntity responseEntity = null;
         try {
-            userValidator.validateChangePassword(user);
-            boolean functionReturn = userService.updatePassword(user.getEmail(), user.getMobileNo(), user.getPassword());
+            userValidator.validateChangePassword(forgetPWDDTO);
+            boolean functionReturn = userService.updatePassword(forgetPWDDTO);
             if (functionReturn == true) {
                 CustomResponse response = new CustomResponse(new Date(), "Password Successfully Changed", 200);
                 return new ResponseEntity(response, HttpStatus.OK);

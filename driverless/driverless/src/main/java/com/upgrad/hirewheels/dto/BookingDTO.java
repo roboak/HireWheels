@@ -13,5 +13,4 @@ public class BookingDTO {
     Date bookingDate;
     int locationId;
     int amount;
-    int activityId;
 }

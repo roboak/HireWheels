@@ -25,19 +25,16 @@ public class BookingValidatorImpl implements BookingValidator {
         String formatDropOffDate = sdf.format(vehicle.getDropoffDate());
         Date parsedDropOffDate = sdf.parse(formatDropOffDate);
         if (vehicle.getUserId() == 0){
-            throw new APIException(" Not a Valid UserId Id");
+            throw new APIException("User Id can't be empty");
         }
         if (vehicle.getVehicleId() == 0){
-            throw new APIException("Not a Valid Vehicle Id");
+            throw new APIException("Vehicle Id can't be empty");
         }
         if (vehicle.getLocationId() == 0){
-            throw new APIException("Not a Valid Location Id");
-        }
-        if (vehicle.getActivityId() == 0){
-            throw new APIException("Not a Valid Location Id");
+            throw new APIException("Location Id can't be empty");
         }
         if (vehicle.getAmount() == 0){
-            throw new APIException("Not a Valid Amount");
+            throw new APIException("Amount can't be empty");
         }
         if (todaysDate.compareTo(parsedBookingDate) != 0){
             throw new APIException("Booking date should be today's date");
@@ -53,7 +50,7 @@ public class BookingValidatorImpl implements BookingValidator {
     @Override
     public void validateBookingHistory(int userId) {
         if (userId == 0){
-            throw new APIException(" Not a Valid UserId Id");
+            throw new APIException("User Id Id can't be empty");
         }
     }
 }

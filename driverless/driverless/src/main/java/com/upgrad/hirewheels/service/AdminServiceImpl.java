@@ -41,7 +41,6 @@ public class AdminServiceImpl implements AdminService{
           adminRequestResponse.setUserComments(a.getUserComments());
           adminRequestResponse.setAdminComments(a.getAdminComments());
           adminRequestResponse.setRequestId(a.getRequestId());
-          adminRequestResponse.setUserId(a.getUser().getUserId());
           adminRequestResponse.setVehicleId(a.getVehicle().getVehicleId());
           adminRequestResponse.setVehicleModel(a.getVehicle().getVehicleModel());
           adminRequestResponse.setVehicleNumber(a.getVehicle().getVehicleNumber());

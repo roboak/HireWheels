@@ -11,12 +11,12 @@ import java.util.List;
 public class AdminValidatorImpl implements AdminValidator{
 
     List<Integer> requestIds = new ArrayList<>(Arrays.asList(301,302,303));
-    List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203,204));
+    List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
 
     @Override
     public void validateGetAllApprovals(int requestId) {
         if(!requestIds.contains(requestId)){
-            throw new APIException("Not a Valid Request Id");
+            throw new APIException("Not a Valid Status Id");
         }
     }
 
@@ -26,7 +26,7 @@ public class AdminValidatorImpl implements AdminValidator{
             throw new APIException("Only Admin Can Update Requests");
         }
         if (vechileId == 0){
-            throw new APIException("Not a Valid Vehicle Id");
+            throw new APIException("Vehicle Id can't be empty");
         }
         if (!requestIds.contains(adminActivityDTO.getRequestStatusId())){
             throw new APIException("Not a Valid Status Id");

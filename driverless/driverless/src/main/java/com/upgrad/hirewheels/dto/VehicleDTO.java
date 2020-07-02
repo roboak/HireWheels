@@ -8,10 +8,9 @@ public class VehicleDTO {
      String vehicleNumber;
      int vehicleSubCategoryId;
      String color;
-     int costPerHour;
      int fuelTypeId;
      int locationId;
      String carImageUrl;
-     int cityId;
+     String userComment;
      int userId;
 }

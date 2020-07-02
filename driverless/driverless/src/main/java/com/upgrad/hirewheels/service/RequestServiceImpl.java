@@ -30,16 +30,16 @@ public class RequestServiceImpl implements RequestService {
      */
 
     public AdminRequest changeAvailabilityRequest(AdminRequestDTO requestDTO, int vehicleId) {
-        AdminRequest returnedVehicle = vehicleDAO.findById(vehicleId).get().getAdminRequest();
-        if(returnedVehicle == null){
+        AdminRequest adminRequest = vehicleDAO.findById(vehicleId).get().getAdminRequest();
+        if(adminRequest == null){
             throw new APIException("Invalid Vehicle Id");
         }
         /**
          * To OptOut, vehicle must be in OptIn or Registered State with Approved Status
          */
-        if ( returnedVehicle.getRequestStatus().getRequestStatusId() == 203){
-            if(returnedVehicle.getRequestStatus().getRequestStatusId() != 202 || returnedVehicle.getRequestStatus().getRequestStatusId() != 201
-                    && returnedVehicle.getActivity().getActivityId() != 302)
+        if ( adminRequest.getActivity().getActivityId() == 203){
+            if(adminRequest.getActivity().getActivityId() != 202 || adminRequest.getActivity().getActivityId() != 201
+                    && adminRequest.getRequestStatus().getRequestStatusId() != 302)
             {
                 throw new APIException("Invalid OPT_OUT Request");
             }
@@ -47,21 +47,25 @@ public class RequestServiceImpl implements RequestService {
         /**
          * To OptIn, vehicle must be in OptOut State with Approved Status
          */
-        if (returnedVehicle.getRequestStatus().getRequestStatusId() == 202){
-            if(returnedVehicle.getRequestStatus().getRequestStatusId() != 203 && returnedVehicle.getActivity().getActivityId() != 302)
+        if (adminRequest.getActivity().getActivityId() == 202){
+            if(adminRequest.getActivity().getActivityId() != 203 && adminRequest.getRequestStatus().getRequestStatusId() != 302)
             {
                 throw new APIException("OPT_IN Action Not Allowed");
             }
         }
         Activity activity = new Activity();
         activity.setActivityId(requestDTO.getActivityId());
-        returnedVehicle.setActivity(activity);
+        adminRequest.setActivity(activity);
         RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setRequestStatusId(301);
-        returnedVehicle.setRequestStatus(requestStatus);
-        returnedVehicle.setUserComments(requestDTO.getAdminComments());
-        adminRequestDAO.save(returnedVehicle);
-        return returnedVehicle;
+        if(requestDTO.getUserId() != 1){
+            requestStatus.setRequestStatusId(301);
+        } else {
+            requestStatus.setRequestStatusId(302);
+        }
+        adminRequest.setRequestStatus(requestStatus);
+        adminRequest.setUserComments(requestDTO.getUserComments());
+        adminRequestDAO.save(adminRequest);
+        return adminRequest;
     }
 
     /**
@@ -75,9 +79,9 @@ public class RequestServiceImpl implements RequestService {
         Vehicle vehicle = new Vehicle();
         AdminRequest adminRequest = new AdminRequest();
         vehicle.setVehicleModel(vehicleDTO.getVehicleModel());
-        Users users = new Users();
-        users.setUserId(vehicleDTO.getUserId());
-        vehicle.setUser(users);
+        Users user = new Users();
+        user.setUserId(vehicleDTO.getUserId());
+        vehicle.setUser(user);
         vehicle.setVehicleNumber(vehicleDTO.getVehicleNumber());
         vehicle.setColor(vehicleDTO.getColor());
         FuelType fuelType = new FuelType();
@@ -98,11 +102,11 @@ public class RequestServiceImpl implements RequestService {
         RequestStatus requestStatus = new RequestStatus();
         activity.setActivityId(201);
         adminRequest.setActivity(activity);
-        adminRequest.setUser(users);
+        adminRequest.setUser(user);
         if (vehicleDTO.getUserId() != 1) {
             requestStatus.setRequestStatusId(301);
             adminRequest.setRequestStatus(requestStatus);
-            adminRequest.setUserComments("Kindly Approve My Vehicle.");
+            adminRequest.setUserComments(vehicleDTO.getUserComment());
             adminRequest.setVehicle(vehicle1);
             adminRequestDAO.save(adminRequest);
         } else {

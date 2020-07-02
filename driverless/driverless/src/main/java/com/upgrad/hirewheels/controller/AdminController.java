@@ -44,11 +44,11 @@ public class AdminController {
     }
 
     @PutMapping("/{vehicleId}/request")
-    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO vehicle, @PathVariable int vehicleId) {
+    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO adminActivityDTO, @PathVariable int vehicleId) {
         ResponseEntity responseEntity = null;
         try {
-            adminValidator.validateUpdateVehicleRequest(vehicle, vehicleId);
-            adminService.updateRequest(vehicle, vehicleId);
+            adminValidator.validateUpdateVehicleRequest(adminActivityDTO, vehicleId);
+            adminService.updateRequest(adminActivityDTO, vehicleId);
             CustomResponse response = new CustomResponse(new Date(), "Request Updated Success.",200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){

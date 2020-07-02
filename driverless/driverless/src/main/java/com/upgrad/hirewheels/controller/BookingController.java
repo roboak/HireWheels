@@ -28,11 +28,11 @@ public class BookingController {
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
     @PostMapping("/bookVehicle")
-    public ResponseEntity addBooking(@RequestBody BookingDTO vehicle) {
+    public ResponseEntity addBooking(@RequestBody BookingDTO bookingDTO) {
         ResponseEntity responseEntity = null;
         try {
-            bookingValidator.validateBooking(vehicle);
-            Booking responseBooking = bookingService.addBooking(vehicle);
+            bookingValidator.validateBooking(bookingDTO);
+            Booking responseBooking = bookingService.addBooking(bookingDTO);
             responseEntity = ResponseEntity.ok(responseBooking);
         } catch (ParseException | GlobalExceptionHandler e){
             logger.error(e.getMessage());

@@ -12,6 +12,5 @@ public class AdminRequestResponse {
     String vehicleModel;
     String vehicleNumber;
     String carImageUrl;
-    int userId;
     int activityId;
 }

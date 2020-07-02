@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface AdminService {
     List<AdminRequestResponse> getAllAdminRequest(int requestId);
-    Boolean updateRequest(AdminActivityDTO vehicleDTO, int vehicleId);
+    Boolean updateRequest(AdminActivityDTO vehicleDTO, int requestId);
 }

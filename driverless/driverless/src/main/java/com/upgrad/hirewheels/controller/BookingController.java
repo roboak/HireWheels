@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bookings")
 public class BookingController {
 
     @Autowired
@@ -27,7 +26,7 @@ public class BookingController {
 
     private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
-    @PostMapping("/bookVehicle")
+    @PostMapping("/bookings")
     public ResponseEntity addBooking(@RequestBody BookingDTO bookingDTO) {
         ResponseEntity responseEntity = null;
         try {
@@ -40,7 +39,7 @@ public class BookingController {
         return responseEntity;
     }
 
-    @GetMapping("/{userId}/history")
+    @GetMapping("/users/{userId}/bookings")
     public ResponseEntity bookingHistory(@PathVariable("userId") int userId) {
         ResponseEntity responseEntity = null;
         try {

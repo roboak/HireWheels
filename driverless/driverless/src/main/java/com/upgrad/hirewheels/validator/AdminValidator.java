@@ -5,5 +5,5 @@ import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 
 public interface AdminValidator {
     void validateGetAllApprovals(int requestId) throws GlobalExceptionHandler;
-    void validateUpdateVehicleRequest(AdminActivityDTO vehicle, int vehicleId) throws GlobalExceptionHandler;
+    void validateUpdateVehicleRequest(AdminActivityDTO vehicle, int requestId) throws GlobalExceptionHandler;
 }

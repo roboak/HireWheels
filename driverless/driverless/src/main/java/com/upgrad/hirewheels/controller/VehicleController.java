@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vehicle")
 public class VehicleController {
 
     @Autowired

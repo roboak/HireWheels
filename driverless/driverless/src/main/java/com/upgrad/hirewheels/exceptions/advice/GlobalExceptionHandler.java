@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 
 @ControllerAdvice
@@ -29,7 +28,7 @@ public class GlobalExceptionHandler extends Exception{
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        return error(NOT_FOUND, ex);
+        return error(UNAUTHORIZED, ex);
     }
 
     @ExceptionHandler(APIException.class)

@@ -58,7 +58,7 @@ public class RequestServiceImpl implements RequestService {
         adminRequest.setActivity(activity);
         RequestStatus requestStatus = new RequestStatus();
         if(requestDTO.getUserId() != 1){
-            requestStatus.setRequestStatusId(301);
+            requestStatus.setRequestStatusId(302);
         } else {
             requestStatus.setRequestStatusId(302);
         }

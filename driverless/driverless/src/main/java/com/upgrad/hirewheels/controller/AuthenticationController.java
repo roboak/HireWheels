@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/authenticate")
 public class AuthenticationController{
 
     @Autowired
@@ -37,20 +36,15 @@ public class AuthenticationController{
             try {
                 userValidator.validateuserLogin(loginDTO);
                 Users userDetail = userService.getUserDetails(loginDTO);
-                if (userDetail != null) {
-                    userDetailResponse.setUserId(userDetail.getUserId());
-                    userDetailResponse.setFirstName(userDetail.getFirstName());
-                    userDetailResponse.setLastName(userDetail.getLastName());
-                    userDetailResponse.setEmail(userDetail.getEmail());
-                    userDetailResponse.setMobileNumber(userDetail.getMobileNo());
-                    userDetailResponse.setWalletMoney(userDetail.getWalletMoney());
-                    userDetailResponse.setRoleName(userDetail.getUserRole().getRoleName());
-                    userDetailResponse.setSuccessMessage("User Successfully Logged In");
-                    responseEntity = ResponseEntity.ok(userDetailResponse);
-                } else {
-                    CustomResponse response = new CustomResponse(new Date(), "User Unauthorized", 401);
-                    return new ResponseEntity(response, HttpStatus.UNAUTHORIZED);
-                }
+                userDetailResponse.setUserId(userDetail.getUserId());
+                userDetailResponse.setFirstName(userDetail.getFirstName());
+                userDetailResponse.setLastName(userDetail.getLastName());
+                userDetailResponse.setEmail(userDetail.getEmail());
+                userDetailResponse.setMobileNumber(userDetail.getMobileNo());
+                userDetailResponse.setWalletMoney(userDetail.getWalletMoney());
+                userDetailResponse.setRoleName(userDetail.getUserRole().getRoleName());
+                userDetailResponse.setSuccessMessage("User Successfully Logged In");
+                responseEntity = ResponseEntity.ok(userDetailResponse);
             } catch (GlobalExceptionHandler e){
                 logger.error(e.getMessage());
             }

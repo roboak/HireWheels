@@ -14,19 +14,19 @@ public class AdminValidatorImpl implements AdminValidator{
     List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
 
     @Override
-    public void validateGetAllApprovals(int requestId) {
-        if(!requestIds.contains(requestId)){
+    public void validateGetAllApprovals(int statusId) {
+        if(!requestIds.contains(statusId)){
             throw new APIException("Not a Valid Status Id");
         }
     }
 
     @Override
-    public void validateUpdateVehicleRequest(AdminActivityDTO adminActivityDTO, int vechileId) {
+    public void validateUpdateVehicleRequest(AdminActivityDTO adminActivityDTO, int requestId) {
         if (adminActivityDTO.getUserId() != 1){
             throw new APIException("Only Admin Can Update Requests");
         }
-        if (vechileId == 0){
-            throw new APIException("Vehicle Id can't be empty");
+        if(requestId == 0){
+            throw new APIException("Not a Valid Request Status Id");
         }
         if (!requestIds.contains(adminActivityDTO.getRequestStatusId())){
             throw new APIException("Not a Valid Status Id");

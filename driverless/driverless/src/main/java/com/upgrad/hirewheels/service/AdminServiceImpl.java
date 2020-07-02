@@ -28,13 +28,13 @@ public class AdminServiceImpl implements AdminService{
     VehicleDAO vehicleDAO;
 
     /**
-     * Returns all the PENDING admin requests for approvals requested by User
-     * @param requestStatusId
+     * Returns all the admin requests for approvals requested by User
+     * @param statusId
      * @return
      */
 
-    public List<AdminRequestResponse> getAllAdminRequest(int requestStatusId) {
-      List<AdminRequest> returnedRequests = requestStatusDAO.findByRequestStatusId(requestStatusId).getAdminRequestList();
+    public List<AdminRequestResponse> getAllAdminRequest(int statusId) {
+      List<AdminRequest> returnedRequests = requestStatusDAO.findByRequestStatusId(statusId).getAdminRequestList();
       List<AdminRequestResponse> mappedList = new ArrayList<>();
       returnedRequests.forEach(a-> {
           AdminRequestResponse adminRequestResponse = new AdminRequestResponse();
@@ -55,23 +55,23 @@ public class AdminServiceImpl implements AdminService{
     /**
      * Updates the request status of any pending approvals to APPROVED or REJECTED
      * @param adminActivityDTO
-     * @param vehicleId
+     * @param requestId
      * @return
      */
 
-    public Boolean updateRequest(AdminActivityDTO adminActivityDTO, int vehicleId) {
-        AdminRequest returnedVehicle = vehicleDAO.findById(vehicleId).get().getAdminRequest();
-        if( returnedVehicle == null){
-            throw new APIException("Invalid Vehicle Id");
+    public Boolean updateRequest(AdminActivityDTO adminActivityDTO, int requestId) {
+        AdminRequest adminRequest = adminRequestDAO.findById(requestId).get();
+        if( adminRequest == null){
+            throw new APIException("Invalid Request Id");
         }
         Activity activity = new Activity();
         activity.setActivityId(adminActivityDTO.getActivityId());
-        returnedVehicle.setActivity(activity);
+        adminRequest.setActivity(activity);
         RequestStatus requestStatus = new RequestStatus();
-        requestStatus.setRequestStatusId(adminActivityDTO.getRequestStatusId());
-        returnedVehicle.setRequestStatus(requestStatus);
-        returnedVehicle.setUserComments(adminActivityDTO.getUserComments());
-        adminRequestDAO.save(returnedVehicle);
+        requestStatus.setRequestStatusId(requestId);
+        adminRequest.setRequestStatus(requestStatus);
+        adminRequest.setAdminComments(adminActivityDTO.getAdminComments());
+        adminRequestDAO.save(adminRequest);
         return true;
     }
 }

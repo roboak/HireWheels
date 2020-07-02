@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService{
     public Users getUserDetails(LoginDTO loginDTO) {
             Users checkUser = userDAO.findByEmail(loginDTO.getEmail());
             if (checkUser == null){
-                throw new UserNotFoundException("User Not Registered");
+                throw new UserNotFoundException("User Unauthorized");
             }
             Users user = userDAO.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
             return user;

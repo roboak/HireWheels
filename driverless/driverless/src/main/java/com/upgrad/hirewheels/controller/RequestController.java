@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/request")
 public class RequestController {
 
     @Autowired
@@ -27,7 +26,7 @@ public class RequestController {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestController.class);
 
-    @PutMapping("/{vehicleId}")
+    @PutMapping("vehicles/{vehicleId}/requests")
     public ResponseEntity changeVehicleAvailability(@RequestBody AdminRequestDTO adminRequestDTO, @PathVariable int vehicleId) {
         ResponseEntity responseEntity = null;
         try{
@@ -47,7 +46,7 @@ public class RequestController {
             return responseEntity;
         }
 
-    @PostMapping("/vehicle")
+    @PostMapping("/vehicles")
     public ResponseEntity addVehicleRequest(@RequestBody VehicleDTO vehicleDTO){
         ResponseEntity responseEntity = null;
         try{

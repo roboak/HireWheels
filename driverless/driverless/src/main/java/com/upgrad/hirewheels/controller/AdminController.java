@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -43,13 +42,13 @@ public class AdminController {
         return responseEntity;
     }
 
-    @PutMapping("/{vehicleId}/request")
-    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO adminActivityDTO, @PathVariable int vehicleId) {
+    @PutMapping("/requests/{requestId}")
+    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO adminActivityDTO, @PathVariable int requestId) {
         ResponseEntity responseEntity = null;
         try {
-            adminValidator.validateUpdateVehicleRequest(adminActivityDTO, vehicleId);
-            adminService.updateRequest(adminActivityDTO, vehicleId);
-            CustomResponse response = new CustomResponse(new Date(), "Request Updated Success.",200);
+            adminValidator.validateUpdateVehicleRequest(adminActivityDTO, requestId);
+            adminService.updateRequest(adminActivityDTO, requestId);
+            CustomResponse response = new CustomResponse(new Date(), "Request Updated Successfully.",200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());

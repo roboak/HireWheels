@@ -6,7 +6,6 @@ import lombok.Data;
 public class AdminActivityDTO {
     int activityId;
     int requestStatusId;
-    String userComments;
     String adminComments;
     int userId;
 }

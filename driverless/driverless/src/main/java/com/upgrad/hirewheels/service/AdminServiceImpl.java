@@ -66,8 +66,7 @@ public class AdminServiceImpl implements AdminService{
 
     public Boolean updateRequest(AdminActivityDTO adminActivityDTO, int requestId) {
         AdminRequest adminRequest = adminRequestDAO.findById(requestId).get();
-        Activity activity = activityDAO.findById(adminActivityDTO.getActivityId()).get();
-        adminRequest.setActivity(activity);
+        adminRequest.setActivity(activityDAO.findById(adminActivityDTO.getActivityId()).get());
         RequestStatus requestStatus = requestStatusDAO.findByRequestStatusId(adminActivityDTO.getRequestStatusId());
         adminRequest.setRequestStatus(requestStatus);
         adminRequest.setAdminComments(adminActivityDTO.getAdminComments());

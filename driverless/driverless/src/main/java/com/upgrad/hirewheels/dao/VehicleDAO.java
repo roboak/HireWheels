@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VehicleDAO extends JpaRepository<Vehicle, Integer> {
+   boolean existsByVehicleNumber(String VehicleNumber);
 }

@@ -184,7 +184,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 	}
 
 	private void addUsers() {
-		Users adminUser = new Users();
+		User adminUser = new User();
 		adminUser.setFirstName("Upgrad");
 		adminUser.setLastName("Admim");
 		adminUser.setEmail("upgrad@gmail.com");

@@ -4,7 +4,7 @@ import com.upgrad.hirewheels.dao.UserRoleDAO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.dto.UserDTO;
-import com.upgrad.hirewheels.entities.Users;
+import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.dao.UserDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.UserAlreadyExistsException;
@@ -28,12 +28,12 @@ public class UserServiceImpl implements UserService{
      * @return logged in user details.
      */
 
-    public Users getUserDetails(LoginDTO loginDTO) {
-            Users checkUser = userDAO.findByEmail(loginDTO.getEmail());
+    public User getUserDetails(LoginDTO loginDTO) {
+            User checkUser = userDAO.findByEmail(loginDTO.getEmail());
             if (checkUser == null){
                 throw new APIException("User Not Registered");
             }
-            Users user = userDAO.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
+            User user = userDAO.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
             if (user == null){
             throw new UserNotFoundException("Unauthorized User");
             }
@@ -46,24 +46,24 @@ public class UserServiceImpl implements UserService{
      * @return saved userDTO details.
      */
 
-    public Users createUser(UserDTO userDTO) {
-            Users returnedUser = userDAO.findByEmail(userDTO.getEmail());
+    public User createUser(UserDTO userDTO) {
+            User returnedUser = userDAO.findByEmail(userDTO.getEmail());
                 if ( returnedUser != null) {
                     throw new UserAlreadyExistsException("Email Already Exists");
                 }
-            Users returnedUser1 = userDAO.findByMobileNo(userDTO.getMobileNo());
+            User returnedUser1 = userDAO.findByMobileNo(userDTO.getMobileNo());
             if (returnedUser1 != null) {
                 throw new UserAlreadyExistsException("Mobile Number Already Exists");
                 }
-            Users users = new Users();
-            users.setWalletMoney(10000);
-            users.setUserRole(userRoleDAO.findByRoleId(2));
-            users.setEmail(userDTO.getEmail());
-            users.setPassword(userDTO.getPassword());
-            users.setFirstName(userDTO.getFirstName());
-            users.setLastName(userDTO.getLastName());
-            users.setMobileNo(userDTO.getMobileNo());
-            Users savedUser = userDAO.save(users);
+            User user = new User();
+            user.setWalletMoney(10000);
+            user.setUserRole(userRoleDAO.findByRoleId(2));
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setMobileNo(userDTO.getMobileNo());
+            User savedUser = userDAO.save(user);
             return savedUser;
     }
 
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService{
      */
 
     public Boolean updatePassword(ForgetPWDDTO forgetPWDDTO) {
-            Users user = userDAO.findByEmailAndMobileNo(forgetPWDDTO.getEmail(), forgetPWDDTO.getMobileNo());
+            User user = userDAO.findByEmailAndMobileNo(forgetPWDDTO.getEmail(), forgetPWDDTO.getMobileNo());
             if(user == null){
                 throw new APIException("Invalid Email/Mobile Number");
             }

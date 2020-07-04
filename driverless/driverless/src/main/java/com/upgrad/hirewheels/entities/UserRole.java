@@ -16,5 +16,5 @@ public class UserRole {
     String roleName;
     @OneToMany(fetch = FetchType.LAZY)
     @JsonManagedReference
-    List<Users> usersList;
+    List<User> userList;
 }

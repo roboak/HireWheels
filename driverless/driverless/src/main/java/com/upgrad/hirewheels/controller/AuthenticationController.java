@@ -3,11 +3,10 @@ package com.upgrad.hirewheels.controller;
 import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
-import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.responsemodel.UserDetailResponse;
-import com.upgrad.hirewheels.entities.Users;
+import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.service.UserService;
 import com.upgrad.hirewheels.validator.UserValidator;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class AuthenticationController{
         UserDetailResponse userDetailResponse = new UserDetailResponse();
             try {
                 userValidator.validateuserLogin(loginDTO);
-                Users userDetail = userService.getUserDetails(loginDTO);
+                User userDetail = userService.getUserDetails(loginDTO);
                 userDetailResponse.setUserId(userDetail.getUserId());
                 userDetailResponse.setFirstName(userDetail.getFirstName());
                 userDetailResponse.setLastName(userDetail.getLastName());
@@ -56,7 +55,7 @@ public class AuthenticationController{
         ResponseEntity responseEntity = null;
         try {
             userValidator.validateUserSignUp(userDTO);
-            Users functionReturn = userService.createUser(userDTO);
+            User functionReturn = userService.createUser(userDTO);
             if (functionReturn != null) {
                 CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
                 responseEntity = new ResponseEntity(response, HttpStatus.OK);

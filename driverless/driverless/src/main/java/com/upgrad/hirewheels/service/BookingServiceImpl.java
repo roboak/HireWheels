@@ -6,14 +6,12 @@ import com.upgrad.hirewheels.dao.VehicleDAO;
 import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.dao.BookingDAO;
-import com.upgrad.hirewheels.entities.Users;
-import com.upgrad.hirewheels.entities.Vehicle;
+import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.responsemodel.BookingHistoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,7 @@ public class BookingServiceImpl implements BookingService {
         booking.setPickUpDate(bookingDTO.getPickupDate());
         booking.setDropOffDate(bookingDTO.getDropoffDate());
         booking.setBookingWithUser(userDAO.findById(bookingDTO.getUserId()).get());
-        Users user = userDAO.findById(bookingDTO.getUserId()).get();
+        User user = userDAO.findById(bookingDTO.getUserId()).get();
         if (user.getWalletMoney() < bookingDTO.getAmount()) {
             throw new APIException("InSufficient Balance. Please Check With Admin.");
         } else {

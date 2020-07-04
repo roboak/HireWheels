@@ -3,7 +3,6 @@ package com.upgrad.hirewheels.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.List;
@@ -41,7 +40,7 @@ public class Vehicle {
            = CascadeType.MERGE)
    @JsonBackReference
    @JoinColumn(name = "userId")
-   Users user;
+   User user;
    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicleWithBooking",cascade
            = CascadeType.MERGE)
    @JsonManagedReference

@@ -2,7 +2,6 @@ package com.upgrad.hirewheels.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,7 +25,7 @@ public class Booking {
             = CascadeType.MERGE)
     @JoinColumn(name = "userId")
     @JsonBackReference
-    Users bookingWithUser;
+    User bookingWithUser;
     @ManyToOne(fetch = FetchType.LAZY,cascade
             = CascadeType.MERGE)
     @JoinColumn(name = "locationId")

@@ -1,5 +1,7 @@
 package com.upgrad.hirewheels.service;
 
+import com.upgrad.hirewheels.constants.ActivityEnum;
+import com.upgrad.hirewheels.constants.StatusEnum;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 import com.upgrad.hirewheels.entities.*;
@@ -65,12 +67,12 @@ public class VehicleServiceImpl implements VehicleService {
         returnedVehicleList.forEach(a-> {
             List<Booking> bookedVehicleList = bookingDAO.findByVehicleWithBooking(a);
             bookedVehicleList.forEach(b ->{
-                if ((pickUpDate.after(b.getPickUpDate()) && pickUpDate.before(b.getDropOffDate())) || (dropDate.after(b.getPickUpDate()) && dropDate.before(b.getDropOffDate())) || (pickUpDate.before(b.getPickUpDate()) && dropDate.after(b.getDropOffDate())) || pickUpDate.equals(b.getDropOffDate()) || dropDate.equals(b.getPickUpDate())){
+                if ((pickUpDate.after(b.getPickUpDate()) && pickUpDate.before(b.getDropOffDate())) || (dropDate.after(b.getPickUpDate()) && dropDate.before(b.getDropOffDate())) || (pickUpDate.before(b.getPickUpDate()) && dropDate.after(b.getDropOffDate())) || pickUpDate.equals(b.getDropOffDate()) || dropDate.equals(b.getPickUpDate()) || pickUpDate.equals(b.getPickUpDate()) || dropDate.equals(b.getDropOffDate())){
                     bookedVehicleIdList.add(b.getVehicleWithBooking().getVehicleId());
                 }
             });
         });
-        List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 203).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
+        List<Integer> approvedVehicles = requestStatusDAO.findById(StatusEnum.APPROVED.getValue()).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != ActivityEnum.CAR_OPT_OUT.getValue()).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
         for (Vehicle v : returnedVehicleList) {
             if (approvedVehicles.contains(v.getVehicleId())) {

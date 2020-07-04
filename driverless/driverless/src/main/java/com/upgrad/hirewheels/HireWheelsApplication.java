@@ -1,5 +1,6 @@
 package com.upgrad.hirewheels;
 
+import com.upgrad.hirewheels.constants.ActivityEnum;
 import com.upgrad.hirewheels.dao.*;
 import com.upgrad.hirewheels.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 	}
 
 	@Override
-	public void run(String... arg0) throws Exception {
+	public void run(String... arg0){
 		addUserRole();
 		addUsers();
 		addActivity();

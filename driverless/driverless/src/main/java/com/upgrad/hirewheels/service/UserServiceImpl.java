@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService{
                 }
             User user = new User();
             user.setWalletMoney(10000);
-            user.setUserRole(userRoleDAO.findByRoleId(2));
+            user.setUserRole(userRoleDAO.findByRoleId(2)); //RoleId:2 for User
             user.setEmail(userDTO.getEmail());
             user.setPassword(userDTO.getPassword());
             user.setFirstName(userDTO.getFirstName());

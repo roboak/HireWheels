@@ -66,10 +66,13 @@ public class RequestServiceImpl implements RequestService {
         adminRequest.setActivity(activityDAO.findById(adminRequestDTO.getActivityId()).get());
         if(adminRequestDTO.getUserId() != 1){
             adminRequest.setRequestStatus(requestStatusDAO.findByRequestStatusId(301));
+            adminRequest.setUserComments(adminRequestDTO.getUserComments());
+            adminRequest.setAdminComments(adminRequest.getAdminComments());
         } else {
             adminRequest.setRequestStatus(requestStatusDAO.findByRequestStatusId(302));
+            adminRequest.setAdminComments(adminRequestDTO.getAdminComments());
+            adminRequest.setUserComments(adminRequest.getUserComments());
         }
-        adminRequest.setUserComments(adminRequestDTO.getUserComments());
         adminRequestDAO.save(adminRequest);
         return adminRequest;
     }

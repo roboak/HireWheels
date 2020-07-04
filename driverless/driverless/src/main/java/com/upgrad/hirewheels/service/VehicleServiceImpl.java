@@ -62,8 +62,15 @@ public class VehicleServiceImpl implements VehicleService {
                 }
             }));
         List<Integer> bookedVehicleIdList = new ArrayList<>();
-        bookingDAO.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicleIdList.add(a.getVehicleWithBooking().getVehicleId());});
-        List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
+        returnedVehicleList.forEach(a-> {
+            List<Booking> bookedVehicleList = bookingDAO.findByVehicleWithBooking(a);
+            bookedVehicleList.forEach(b ->{
+                if ((pickUpDate.after(b.getPickUpDate()) && pickUpDate.before(b.getDropOffDate())) || (dropDate.after(b.getPickUpDate()) && dropDate.before(b.getDropOffDate())) || (pickUpDate.before(b.getPickUpDate()) && dropDate.after(b.getDropOffDate())) || pickUpDate.equals(b.getDropOffDate()) || dropDate.equals(b.getPickUpDate())){
+                    bookedVehicleIdList.add(b.getVehicleWithBooking().getVehicleId());
+                }
+            });
+        });
+        List<Integer> approvedVehicles = requestStatusDAO.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 203).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
         for (Vehicle v : returnedVehicleList) {
             if (approvedVehicles.contains(v.getVehicleId())) {

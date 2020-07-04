@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class RequestValidatorImpl implements RequestValidator {
 
-    List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));
+    List<Integer> activityIds = new ArrayList<>(Arrays.asList(202,203));
 
     @Autowired
     UserDAO userDAO;

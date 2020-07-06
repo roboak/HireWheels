@@ -1,6 +1,6 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.dto.AddBookingDTO;
+import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class BookingValidatorImpl implements BookingValidator {
 
 
     @Override
-    public void validateBooking(AddBookingDTO vehicle) throws ParseException {
+    public void validateBooking(BookingDTO vehicle) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = sdf.format(new Date());
         Date todaysDate = sdf.parse(dateString);
@@ -24,20 +24,8 @@ public class BookingValidatorImpl implements BookingValidator {
         Date parsedPickUpDate = sdf.parse(formatPickUpDate);
         String formatDropOffDate = sdf.format(vehicle.getDropoffDate());
         Date parsedDropOffDate = sdf.parse(formatDropOffDate);
-        if (vehicle.getUserId() == 0){
-            throw new APIException("UserId Id cannot be empty or null");
-        }
-        if (vehicle.getVehicleId() == 0){
-            throw new APIException("Vehicle Id cannot be empty or null");
-        }
-        if (vehicle.getLocationId() == 0){
-            throw new APIException("Location Id cannot be empty or null");
-        }
-        if (vehicle.getActivityId() == 0){
-            throw new APIException("Location Id cannot be empty or null");
-        }
-        if (vehicle.getAmount() == 0){
-            throw new APIException("Amount cannot be empty or null");
+        if (vehicle.getUserId() == 0 || vehicle.getAmount() == 0|| vehicle.getLocationId() == 0 || vehicle.getVehicleId() == 0){
+            throw new APIException("User/Amount/Location/Vehicle ID can't be empty");
         }
         if (todaysDate.compareTo(parsedBookingDate) != 0){
             throw new APIException("Booking date should be today's date");
@@ -47,6 +35,13 @@ public class BookingValidatorImpl implements BookingValidator {
         }
         if (todaysDate.compareTo(parsedPickUpDate) == 1){
             throw new APIException("PickUpDate should not be less than today's date");
+        }
+    }
+
+    @Override
+    public void validateBookingHistory(int userId) {
+        if (userId == 0){
+            throw new APIException("User Id Id can't be empty");
         }
     }
 }

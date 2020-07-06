@@ -3,12 +3,14 @@ package com.upgrad.hirewheels.responsemodel;
 import lombok.Data;
 
 @Data
-public class AvailableRequestResponse {
+public class AdminRequestResponse {
     int requestId;
     String userComments;
     String adminComments;
     int requestStatusId;
     int vehicleId;
-    int userId;
+    String vehicleModel;
+    String vehicleNumber;
+    String carImageUrl;
     int activityId;
 }

@@ -11,8 +11,8 @@ import java.util.List;
 public class VehicleCategory {
     @Id
     int vehicleCategoryId;
-    @Column( nullable = false)
+    @Column( nullable = false , unique = true)
     String vehicleCategoryName;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleCategory")
-    List<VehicleSubCategory> vehicleSubCategories;
+    List<VehicleSubCategory> vehicleSubCategoriesList;
 }

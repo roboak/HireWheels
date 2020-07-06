@@ -9,15 +9,12 @@ import java.util.List;
 public class VehicleDetailResponse {
     int vehicleId;
     String vehicleModel;
-    int vehicleOwner;
+    int vehicleOwnerId;
+    String vehicleOwnerName;
     String vehicleNumber;
     String color;
     String fuelType;
     int locationId;
-    String locationName;
-    String address;
-    String cityName;
-    int pincode;
     String carImageUrl;
     int costPerHour;
     int activityId;

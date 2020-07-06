@@ -1,13 +1,12 @@
 package com.upgrad.hirewheels.controller;
 
-import com.upgrad.hirewheels.dto.AddUserDTO;
+import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
-import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.responsemodel.UserDetailResponse;
-import com.upgrad.hirewheels.entities.Users;
+import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.service.UserService;
 import com.upgrad.hirewheels.validator.UserValidator;
 import org.slf4j.Logger;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/authenticate")
 public class AuthenticationController{
 
     @Autowired
@@ -30,41 +28,36 @@ public class AuthenticationController{
     @Autowired
     UserValidator userValidator;
 
-    @PostMapping("/login")
-    public ResponseEntity setUserLogin(@RequestBody LoginDTO user){
+    @PostMapping("/users/access-token")
+    public ResponseEntity userLogin(@RequestBody LoginDTO loginDTO){
         ResponseEntity responseEntity = null;
         UserDetailResponse userDetailResponse = new UserDetailResponse();
             try {
-                userValidator.validateuserLogin(user);
-                Users userDetail = userService.getUserDetails(user.getEmail(), user.getPassword());
-                if (userDetail != null) {
-                    userDetailResponse.setUserId(userDetail.getUserId());
-                    userDetailResponse.setFirstName(userDetail.getFirstName());
-                    userDetailResponse.setLastName(userDetail.getLastName());
-                    userDetailResponse.setEmail(userDetail.getEmail());
-                    userDetailResponse.setMobileNumber(userDetail.getMobileNo());
-                    userDetailResponse.setWalletMoney(userDetail.getWalletMoney());
-                    userDetailResponse.setRoleName(userDetail.getUserRole().getRoleName());
-                    userDetailResponse.setSuccessMessage("User Successfully Logged In");
-                    responseEntity = ResponseEntity.ok(userDetailResponse);
-                } else {
-                    throw new APIException("Invalid Credentials");
-                }
+                userValidator.validateuserLogin(loginDTO);
+                User userDetail = userService.getUserDetails(loginDTO);
+                userDetailResponse.setUserId(userDetail.getUserId());
+                userDetailResponse.setFirstName(userDetail.getFirstName());
+                userDetailResponse.setLastName(userDetail.getLastName());
+                userDetailResponse.setEmail(userDetail.getEmail());
+                userDetailResponse.setMobileNumber(userDetail.getMobileNo());
+                userDetailResponse.setWalletMoney(userDetail.getWalletMoney());
+                userDetailResponse.setRoleName(userDetail.getUserRole().getRoleName());
+                userDetailResponse.setSuccessMessage("User Successfully Logged In");
+                responseEntity = ResponseEntity.ok(userDetailResponse);
             } catch (GlobalExceptionHandler e){
                 logger.error(e.getMessage());
             }
         return responseEntity;
     }
 
-    @PostMapping("/sign-up")
-    public ResponseEntity userSignUp(@RequestBody AddUserDTO user) {
+    @PostMapping("/users")
+    public ResponseEntity userSignUp(@RequestBody UserDTO userDTO) {
         ResponseEntity responseEntity = null;
         try {
-            userValidator.validateUserSignUp(user);
-            Users functionReturn = userService.createUser(user);
+            userValidator.validateUserSignUp(userDTO);
+            User functionReturn = userService.createUser(userDTO);
             if (functionReturn != null) {
-                SuccessResponse response = new SuccessResponse(new Date(), "User Successfully Signed Up",
-                        "/sign-up", 200);
+                CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
                 responseEntity = new ResponseEntity(response, HttpStatus.OK);
             }
         }
@@ -74,15 +67,14 @@ public class AuthenticationController{
         return responseEntity;
     }
 
-    @PutMapping("/forgot-pwd")
-    public ResponseEntity changePassword(@RequestBody ForgetPWDDTO user) {
+    @PutMapping("/users/access-token/password")
+    public ResponseEntity changePassword(@RequestBody ForgetPWDDTO forgetPWDDTO) {
         ResponseEntity responseEntity = null;
         try {
-            userValidator.validateChangePassword(user);
-            boolean functionReturn = userService.updatePassword(user.getEmail(), user.getMobileNo(), user.getPassword());
+            userValidator.validateChangePassword(forgetPWDDTO);
+            boolean functionReturn = userService.updatePassword(forgetPWDDTO);
             if (functionReturn == true) {
-                SuccessResponse response = new SuccessResponse(new Date(), "Password Successfully Changed",
-                        "/forgot-pwd", 200);
+                CustomResponse response = new CustomResponse(new Date(), "Password Successfully Changed", 200);
                 return new ResponseEntity(response, HttpStatus.OK);
             }
         } catch (GlobalExceptionHandler e){

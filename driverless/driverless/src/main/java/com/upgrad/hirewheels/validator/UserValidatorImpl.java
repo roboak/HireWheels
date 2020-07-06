@@ -1,10 +1,9 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.dto.AddUserDTO;
+import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +25,7 @@ public class UserValidatorImpl implements UserValidator {
     }
 
     @Override
-    public void validateUserSignUp(AddUserDTO user){
+    public void validateUserSignUp(UserDTO user){
         EmailValidator validator = EmailValidator.getInstance();
         if(user.getFirstName().isEmpty() || user.getFirstName() ==null){
             throw new APIException("FirstName cannot be null or empty");
@@ -37,7 +36,7 @@ public class UserValidatorImpl implements UserValidator {
         if (!validator.isValid(user.getEmail())){
                         throw new APIException("Email Id Validation Error");
         }
-        if (user.getMobileNo() == 0 || String.valueOf(user.getMobileNo()).length()<10){
+        if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10 || user.getMobileNo().length()>10){
             throw new APIException("Mobile Number cannot be null or empty and must be 10 digits");
         }
     }
@@ -49,7 +48,7 @@ public class UserValidatorImpl implements UserValidator {
             throw new APIException("Password cannot be null or empty or less than 5 characters");
         }else if (!validator.isValid(user.getEmail())){
             throw new APIException("Email Id Validation Error");
-        }else if (user.getMobileNo() == 0 || String.valueOf(user.getMobileNo()).length()<10){
+        }else if (user.getMobileNo().isEmpty() || user.getMobileNo() == null || user.getMobileNo().length()<10 || user.getMobileNo().length()>10){
             throw new APIException("Mobile Number cannot be null or empty and must be 10 digits");
         }
     }

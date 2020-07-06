@@ -1,9 +1,11 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.UserRoleRepository;
-import com.upgrad.hirewheels.dto.AddUserDTO;
-import com.upgrad.hirewheels.entities.Users;
-import com.upgrad.hirewheels.dao.UserRepository;
+import com.upgrad.hirewheels.dao.UserRoleDAO;
+import com.upgrad.hirewheels.dto.ForgetPWDDTO;
+import com.upgrad.hirewheels.dto.LoginDTO;
+import com.upgrad.hirewheels.dto.UserDTO;
+import com.upgrad.hirewheels.entities.User;
+import com.upgrad.hirewheels.dao.UserDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.UserAlreadyExistsException;
 import com.upgrad.hirewheels.exceptions.UserNotFoundException;
@@ -15,72 +17,72 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService{
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
     @Autowired
-    UserRoleRepository userRoleRepository;
+    UserRoleDAO userRoleDAO;
 
     /**
      * Checks if the user is registered or not. If registered it returns the user details else throws an error.
-     * @param email
-     * @param password
+     * @param loginDTO
      * @return logged in user details.
      */
 
-    public Users getUserDetails(String email, String password) {
-            Users checkUser = userRepository.findByEmail(email);
+    public User getUserDetails(LoginDTO loginDTO) {
+            User checkUser = userDAO.findByEmail(loginDTO.getEmail());
             if (checkUser == null){
-                throw new UserNotFoundException("User Not Registered");
+                throw new APIException("User Not Registered");
             }
-            Users user = userRepository.findByEmailAndPassword(email, password);
+            User user = userDAO.findByEmailAndPassword(loginDTO.getEmail(), loginDTO.getPassword());
+            if (user == null){
+            throw new UserNotFoundException("Unauthorized User");
+            }
             return user;
     }
 
     /**
-     * Checks if the user mobile number/email is already exists or not. If not exists, saves the user detail else throws an error.
-     * @param user
-     * @return saved user details.
+     * Checks if the userDTO mobile number/email is already exists or not. If not exists, saves the userDTO detail else throws an error.
+     * @param userDTO
+     * @return saved userDTO details.
      */
 
-    public Users createUser(AddUserDTO user) {
-            Users returnedUser = userRepository.findByEmail(user.getEmail());
+    public User createUser(UserDTO userDTO) {
+            User returnedUser = userDAO.findByEmail(userDTO.getEmail());
                 if ( returnedUser != null) {
                     throw new UserAlreadyExistsException("Email Already Exists");
                 }
-            Users returnedUser1 = userRepository.findByMobileNo(user.getMobileNo());
+            User returnedUser1 = userDAO.findByMobileNo(userDTO.getMobileNo());
             if (returnedUser1 != null) {
                 throw new UserAlreadyExistsException("Mobile Number Already Exists");
                 }
-            Users users = new Users();
-            users.setWalletMoney(10000);
-            users.setUserRole(userRoleRepository.findByRoleId(2));
-            users.setEmail(user.getEmail());
-            users.setPassword(user.getPassword());
-            users.setFirstName(user.getFirstName());
-            users.setLastName(user.getLastName());
-            users.setMobileNo(user.getMobileNo());
-            Users savedUser = userRepository.save(users);
+            User user = new User();
+            user.setWalletMoney(10000);
+            user.setUserRole(userRoleDAO.findByRoleId(2)); //RoleId:2 for User
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(userDTO.getPassword());
+            user.setFirstName(userDTO.getFirstName());
+            user.setLastName(userDTO.getLastName());
+            user.setMobileNo(userDTO.getMobileNo());
+            User savedUser = userDAO.save(user);
             return savedUser;
     }
 
     /**
      * Checks if the user is registered or not. If registered it checks the new password is not equal to the current password.
      * If the password os different, it updates the password else throws an error.
-     * @param email
-     * @param mobileNo
-     * @param password
+     * @param forgetPWDDTO
      * @return
      */
 
-    public Boolean updatePassword(String email, long mobileNo, String password) {
-            Users user = userRepository.findByEmailAndMobileNo(email,mobileNo);
+    public Boolean updatePassword(ForgetPWDDTO forgetPWDDTO) {
+            User user = userDAO.findByEmailAndMobileNo(forgetPWDDTO.getEmail(), forgetPWDDTO.getMobileNo());
             if(user == null){
                 throw new APIException("Invalid Email/Mobile Number");
             }
             String currentPassword = user.getPassword();
-                if(user != null && !currentPassword.equals(password)) {
-                    user.setPassword(password);
-                    userRepository.save(user);
+                if(user != null && !currentPassword.equals(forgetPWDDTO.getPassword())) {
+                    user.setPassword(forgetPWDDTO.getPassword());
+                    userDAO.save(user);
                     return true;
                 } else {
                     throw new APIException("The new password should be different from the existing one");

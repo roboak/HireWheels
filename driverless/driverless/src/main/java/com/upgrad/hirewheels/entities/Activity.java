@@ -12,9 +12,9 @@ import java.util.List;
 public class Activity {
     @Id
     int activityId;
-    @Column( nullable = false)
+    @Column(unique = true, nullable = false)
     String activityType;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "activity")
     @JsonManagedReference
     List<AdminRequest> adminRequestList;
 }

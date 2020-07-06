@@ -23,7 +23,7 @@ public class AdminRequest {
             = CascadeType.MERGE)
     @JsonBackReference
     @JoinColumn(name = "userId")
-    Users user;
+    User user;
     @ManyToOne(fetch = FetchType.EAGER,cascade
             = CascadeType.MERGE)
     @JoinColumn(name = "activityId")

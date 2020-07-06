@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class AddBookingDTO {
+public class BookingDTO {
     int userId;
     int vehicleId;
     Date pickupDate;
@@ -13,5 +13,4 @@ public class AddBookingDTO {
     Date bookingDate;
     int locationId;
     int amount;
-    int activityId;
 }

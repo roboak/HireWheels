@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ForgetPWDDTO {
     String email;
-    long mobileNo;
+    String mobileNo;
     String password;
 }

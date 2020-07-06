@@ -1,10 +1,10 @@
 package com.upgrad.hirewheels.controller;
 
 
-import com.upgrad.hirewheels.dto.OptVehicleDTO;
-import com.upgrad.hirewheels.exceptions.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.AvailableRequestResponse;
-import com.upgrad.hirewheels.responsemodel.SuccessResponse;
+import com.upgrad.hirewheels.dto.AdminActivityDTO;
+import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
+import com.upgrad.hirewheels.responsemodel.AdminRequestResponse;
+import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.AdminService;
 import com.upgrad.hirewheels.validator.AdminValidator;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
@@ -30,12 +29,12 @@ public class AdminController {
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
 
-    @GetMapping("allApprovals/{requestId}")
-    public ResponseEntity getAllApprovals(@PathVariable int requestId){
+    @GetMapping("requests")
+    public ResponseEntity getAllApprovals(@RequestParam("statusId") int statusId){
         ResponseEntity responseEntity = null;
         try {
-            adminValidator.validateApprovals(requestId);
-            List<AvailableRequestResponse> adminRequestList = adminService.getAllAdminRequest(requestId);
+            adminValidator.validateGetAllApprovals(statusId);
+            List<AdminRequestResponse> adminRequestList = adminService.getAllAdminRequest(statusId);
             responseEntity = ResponseEntity.ok(adminRequestList);
         } catch (GlobalExceptionHandler e) {
             logger.error(e.getMessage());
@@ -43,14 +42,13 @@ public class AdminController {
         return responseEntity;
     }
 
-    @PutMapping("/updateApproval/{vehicleId}")
-    public ResponseEntity addVehicleRequest(@RequestBody OptVehicleDTO vehicle, @PathVariable int vehicleId) {
+    @PutMapping("/requests/{requestId}")
+    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO adminActivityDTO, @PathVariable int requestId) {
         ResponseEntity responseEntity = null;
         try {
-            adminValidator.validateAddVehicleRequest(vehicle, vehicleId);
-            adminService.updateRequest(vehicle, vehicleId);
-            SuccessResponse response = new SuccessResponse(new Date(), "Request Updated Success.",
-                    "/admin/updateApproval", 200);
+            adminValidator.validateUpdateVehicleRequest(adminActivityDTO, requestId);
+            adminService.updateRequest(adminActivityDTO, requestId);
+            CustomResponse response = new CustomResponse(new Date(), "Request Updated Successfully.",200);
             responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         } catch (GlobalExceptionHandler e){
             logger.error(e.getMessage());

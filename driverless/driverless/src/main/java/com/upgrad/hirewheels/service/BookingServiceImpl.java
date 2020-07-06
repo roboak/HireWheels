@@ -1,53 +1,85 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dao.LocationRepository;
-import com.upgrad.hirewheels.dao.UserRepository;
-import com.upgrad.hirewheels.dao.VehicleRepository;
-import com.upgrad.hirewheels.dto.AddBookingDTO;
+import com.upgrad.hirewheels.dao.LocationDAO;
+import com.upgrad.hirewheels.dao.UserDAO;
+import com.upgrad.hirewheels.dao.VehicleDAO;
+import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
-import com.upgrad.hirewheels.dao.BookingRepository;
+import com.upgrad.hirewheels.dao.BookingDAO;
+import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.responsemodel.BookingHistoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BookingServiceImpl implements BookingService {
 
     @Autowired
-    BookingRepository bookingRepository;
+    BookingDAO bookingDAO;
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
     @Autowired
-    LocationRepository locationRepository;
+    LocationDAO locationDAO;
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    VehicleDAO vehicleDAO;
 
-    public Booking addBooking(AddBookingDTO booking){
-        Booking booking1 = new Booking();
-        booking1.setAmount(booking.getAmount());
-        booking1.setBookingDate(booking.getBookingDate());
-        booking1.setPickUpDate(booking.getPickupDate());
-        booking1.setDropOffDate(booking.getDropoffDate());
-        if (userRepository.findById(booking.getUserId()).get() == null){
-            throw new APIException("Invalid User Id for Booking");
+    /**
+     * Helps in adding a bookingDTO for a Vehicle with respect to valid userId,LocationId and BookingId
+     * @param bookingDTO
+     * @return
+     */
+
+    public Booking addBooking(BookingDTO bookingDTO){
+        Booking booking = new Booking();
+        booking.setAmount(bookingDTO.getAmount());
+        booking.setBookingDate(bookingDTO.getBookingDate());
+        booking.setPickUpDate(bookingDTO.getPickupDate());
+        booking.setDropOffDate(bookingDTO.getDropoffDate());
+        booking.setBookingWithUser(userDAO.findById(bookingDTO.getUserId()).get());
+        User user = userDAO.findById(bookingDTO.getUserId()).get();
+        if (user.getWalletMoney() < bookingDTO.getAmount()) {
+            throw new APIException("InSufficient Balance. Please Check With Admin.");
         } else {
-            booking1.setBookingWithUser(userRepository.findById(booking.getUserId()).get());
+            user.setWalletMoney(user.getWalletMoney() - bookingDTO.getAmount());
+            userDAO.save(user);
         }
-        if (locationRepository.findById(booking.getLocationId()).get() == null){
-            throw new APIException("Invalid Location Id for Booking");
-        } else {
-            booking1.setLocationWithBooking(locationRepository.findById(booking.getLocationId()).get());
-        }
-        if (vehicleRepository.findById(booking.getVehicleId()).get() == null){
-            throw new APIException("Invalid Vehicle Id for Booking");
-        } else {
-            booking1.setVehicleWithBooking(vehicleRepository.findById(booking.getVehicleId()).get());
-        }
-        Booking returnResponse = bookingRepository.save(booking1);
-        return returnResponse;
+        booking.setLocationWithBooking(locationDAO.findById(bookingDTO.getLocationId()).get());
+        booking.setVehicleWithBooking(vehicleDAO.findById(bookingDTO.getVehicleId()).get());
+        Booking savedBooking = bookingDAO.save(booking);
+        return savedBooking;
+    }
+
+    /**
+     * Returns the booking history of user
+     * @param userId
+     * @return
+     */
+
+    @Override
+    public List<BookingHistoryResponse> bookingHistory(int userId) {
+        List<BookingHistoryResponse> bookingHistoryResponseList = new ArrayList<>();
+        userDAO.findById(userId).get().getBookingList().forEach(a-> {
+            BookingHistoryResponse bookingHistoryResponse = new BookingHistoryResponse();
+            bookingHistoryResponse.setBookingId(a.getBookingId());
+            bookingHistoryResponse.setBookingDate(a.getBookingDate());
+            bookingHistoryResponse.setDropOffDate(a.getDropOffDate());
+            bookingHistoryResponse.setPickUpDate(a.getPickUpDate());
+            bookingHistoryResponse.setAmount(a.getAmount());
+            bookingHistoryResponse.setVehicleId(a.getVehicleWithBooking().getVehicleId());
+            bookingHistoryResponse.setVehicleNumber(a.getVehicleWithBooking().getVehicleNumber());
+            bookingHistoryResponse.setVehicleModel(a.getVehicleWithBooking().getVehicleModel());
+            bookingHistoryResponse.setLocationName(a.getLocationWithBooking().getLocationName());
+            bookingHistoryResponse.setCarImageUrl(a.getVehicleWithBooking().getCarImageUrl());
+            bookingHistoryResponseList.add(bookingHistoryResponse);
+        });
+        return bookingHistoryResponseList;
     }
 
 }

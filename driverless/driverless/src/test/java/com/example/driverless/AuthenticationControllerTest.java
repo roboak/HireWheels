@@ -40,7 +40,7 @@ public class AuthenticationControllerTest {
         LoginDTO loginDTO = new LoginDTO();
         loginDTO.setEmail("upgrad@gmail.com");
         loginDTO.setPassword("admin@123");
-        ResponseEntity response = restTemplate.postForEntity(getRootUrl() + "/login", loginDTO, LoginDTO.class);
+        ResponseEntity response = restTemplate.postForEntity(getRootUrl() + "/authenticate/users/access-token", loginDTO, LoginDTO.class);
         assertNotNull(response);
         assertNotNull(response.getBody());
     }

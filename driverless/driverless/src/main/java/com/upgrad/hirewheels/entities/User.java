@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "USERS")
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int userId;
@@ -23,7 +23,7 @@ public class Users {
     @Column( nullable = false, unique = true)
     String email;
     @Column( nullable = false, unique = true)
-    long mobileNo;
+    String mobileNo;
     int walletMoney;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference

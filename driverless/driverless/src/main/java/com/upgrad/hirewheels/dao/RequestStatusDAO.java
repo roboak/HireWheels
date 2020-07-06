@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface RequestStatusRepository extends JpaRepository<RequestStatus, Integer> {
+public interface RequestStatusDAO extends JpaRepository<RequestStatus, Integer> {
     RequestStatus findByRequestStatusId(int requestId);
 }

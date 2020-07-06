@@ -1,5 +1,7 @@
 package com.upgrad.hirewheels.service;
 
+import com.upgrad.hirewheels.constants.ActivityEnum;
+import com.upgrad.hirewheels.constants.StatusEnum;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 import com.upgrad.hirewheels.entities.*;
@@ -17,99 +19,113 @@ import java.util.stream.Collectors;
 public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
-    VehicleRepository vehicleRepository;
+    VehicleDAO vehicleDAO;
 
     @Autowired
-    VehicleCategoryRepo vehicleCategoryRepo;
+    VehicleCategoryDAO vehicleCategoryDAO;
 
     @Autowired
-    RequestStatusRepository requestStatusRepository;
+    RequestStatusDAO requestStatusDAO;
 
     @Autowired
-    AdminRequestRepository adminRequestRepository;
+    AdminRequestDAO adminRequestDAO;
 
     @Autowired
-    BookingRepository bookingRepository;
+    BookingDAO bookingDAO;
 
     @Autowired
-    LocationRepository locationRepository;
+    LocationDAO locationDAO;
 
 
     @Autowired
-    FuelTypeRepository fuelTypeRepository;
+    FuelTypeDAO fuelTypeDAO;
 
     @Autowired
-    CityRepository cityRepository;
+    CityDAO cityDAO;
 
     @Autowired
-    UserRepository userRepository;
+    UserDAO userDAO;
 
+
+    /**
+     * Returns all the available vehicle in the requested Category for booking with respect to Date, Location and Availability.
+     * @param categoryName
+     * @param pickUpDate
+     * @param dropDate
+     * @param locationId
+     * @return
+     */
 
     public List<VehicleDetailResponse> getAvailableVehicles(String categoryName, Date pickUpDate,Date dropDate, int locationId) {
         List<Vehicle> returnedVehicleList = new ArrayList<>();
-        if(vehicleCategoryRepo.findByVehicleCategoryName(categoryName) != null){
-            vehicleCategoryRepo.findByVehicleCategoryName(categoryName).getVehicleSubCategories().forEach(a-> a.getVehicle().forEach(b-> {
+            vehicleCategoryDAO.findByVehicleCategoryName(categoryName).getVehicleSubCategoriesList().forEach(a-> a.getVehicleList().forEach(b-> {
                 if (b.getLocationWithVehicle().getLocationId() == locationId) {
                     returnedVehicleList.add(b);
                 }
             }));
-        } else {
-            throw new APIException("Invalid Vehicle Category Name");
-        }
-
-        List<Integer> bookedVehicles = new ArrayList<>();
-        bookingRepository.findByPickUpDateGreaterThanEqualAndDropOffDateLessThanEqual(pickUpDate, dropDate).stream().forEach(a-> {bookedVehicles.add(a.getVehicleWithBooking().getVehicleId());});
-        List<Integer> approvedVehicles = requestStatusRepository.findById(302).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != 204).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
+        List<Integer> bookedVehicleIdList = new ArrayList<>();
+        returnedVehicleList.forEach(a-> {
+            List<Booking> bookedVehicleList = bookingDAO.findByVehicleWithBooking(a);
+            bookedVehicleList.forEach(b ->{
+                if ((pickUpDate.after(b.getPickUpDate()) && pickUpDate.before(b.getDropOffDate())) || (dropDate.after(b.getPickUpDate()) && dropDate.before(b.getDropOffDate())) || (pickUpDate.before(b.getPickUpDate()) && dropDate.after(b.getDropOffDate())) || pickUpDate.equals(b.getDropOffDate()) || dropDate.equals(b.getPickUpDate()) || pickUpDate.equals(b.getPickUpDate()) || dropDate.equals(b.getDropOffDate())){
+                    bookedVehicleIdList.add(b.getVehicleWithBooking().getVehicleId());
+                }
+            });
+        });
+        List<Integer> approvedVehicles = requestStatusDAO.findById(StatusEnum.APPROVED.getValue()).get().getAdminRequestList().stream().filter(a -> a.getActivity().getActivityId() != ActivityEnum.CAR_OPT_OUT.getValue()).map(AdminRequest::getVehicle).map(Vehicle::getVehicleId).collect(Collectors.toList());
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
         for (Vehicle v : returnedVehicleList) {
             if (approvedVehicles.contains(v.getVehicleId())) {
-                if(!bookedVehicles.contains(v.getVehicleId())){
-                    VehicleDetailResponse y = new VehicleDetailResponse();
-                    y.setVehicleId(v.getVehicleId());
-                    y.setVehicleModel(v.getVehicleModel());
-                    y.setVehicleOwner(v.getUser().getUserId());
-                    y.setVehicleNumber(v.getVehicleNumber());
-                    y.setColor(v.getColor());
-                    y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
-                    y.setFuelType(v.getFuelType().getFuelType());
-                    y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                    y.setLocationName(v.getLocationWithVehicle().getLocationName());
-                    y.setAddress(v.getLocationWithVehicle().getAddress());
-                    y.setPincode(v.getLocationWithVehicle().getPincode());
-                    y.setCarImageUrl(v.getCarImageUrl());
-                    y.setCityName(v.getLocationWithVehicle().getCity().getCityName());
-                    mapVehicle.add(y);
+                if(!bookedVehicleIdList.contains(v.getVehicleId())){
+                    VehicleDetailResponse vehicleDetailResponse = new VehicleDetailResponse();
+                    vehicleDetailResponse.setVehicleId(v.getVehicleId());
+                    vehicleDetailResponse.setVehicleModel(v.getVehicleModel());
+                    vehicleDetailResponse.setVehicleOwnerId(v.getUser().getUserId());
+                    vehicleDetailResponse.setVehicleOwnerName(v.getUser().getFirstName());
+                    vehicleDetailResponse.setVehicleNumber(v.getVehicleNumber());
+                    vehicleDetailResponse.setColor(v.getColor());
+                    vehicleDetailResponse.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
+                    vehicleDetailResponse.setFuelType(v.getFuelType().getFuelType());
+                    vehicleDetailResponse.setLocationId(v.getLocationWithVehicle().getLocationId());
+                    vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
+                    vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
+                    vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                    mapVehicle.add(vehicleDetailResponse);
                 }
             }
         }
        return mapVehicle;
     }
 
+    /**
+     * Returns all the vehicle registered by user.
+     * @param userId
+     * @return
+     */
+
     public List<VehicleDetailResponse> getAllVehicleByUserId(int userId) {
         List<VehicleDetailResponse> mapVehicle = new ArrayList<>();
-        List<Vehicle> returnedVehicleList = userRepository.findById(userId).get().getVehiclesList();
-        if (returnedVehicleList == null){
-            throw new APIException("Invalid UserId");
-
+        List<Vehicle> returnedVehicleList;
+        if (userId != 1){
+            returnedVehicleList = userDAO.findById(userId).get().getVehiclesList();
+        } else {
+            returnedVehicleList = vehicleDAO.findAll();
         }
         for (Vehicle v : returnedVehicleList) {
-                VehicleDetailResponse y = new VehicleDetailResponse();
-                y.setVehicleId(v.getVehicleId());
-                y.setVehicleModel(v.getVehicleModel());
-                y.setVehicleOwner(v.getUser().getUserId());
-                y.setVehicleNumber(v.getVehicleNumber());
-                y.setColor(v.getColor());
-                y.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
-                y.setFuelType(v.getFuelType().getFuelType());
-                y.setLocationId(v.getLocationWithVehicle().getLocationId());
-                y.setLocationName(v.getLocationWithVehicle().getLocationName());
-                y.setAddress(v.getLocationWithVehicle().getAddress());
-                y.setPincode(v.getLocationWithVehicle().getPincode());
-                y.setCarImageUrl(v.getCarImageUrl());
-                y.setCityName(v.getLocationWithVehicle().getCity().getCityName());
-                y.setActivityId(v.getAdminRequest().getActivity().getActivityId());
-                y.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
-                mapVehicle.add(y);
+                VehicleDetailResponse vehicleDetailResponse = new VehicleDetailResponse();
+                vehicleDetailResponse.setVehicleId(v.getVehicleId());
+                vehicleDetailResponse.setVehicleModel(v.getVehicleModel());
+                vehicleDetailResponse.setVehicleOwnerId(v.getUser().getUserId());
+                vehicleDetailResponse.setVehicleNumber(v.getVehicleNumber());
+                vehicleDetailResponse.setVehicleOwnerName(v.getUser().getFirstName());
+                vehicleDetailResponse.setColor(v.getColor());
+                vehicleDetailResponse.setCostPerHour(v.getVehicleSubCategory().getPricePerHour());
+                vehicleDetailResponse.setFuelType(v.getFuelType().getFuelType());
+                vehicleDetailResponse.setLocationId(v.getLocationWithVehicle().getLocationId());
+                vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
+                vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
+                vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                mapVehicle.add(vehicleDetailResponse);
         }
         return mapVehicle;
     }

@@ -11,7 +11,7 @@ import java.util.Date;
 @Table(name="BOOKING")
 public class Booking {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     int bookingId;
     @Column( nullable = false)
     Date pickUpDate;

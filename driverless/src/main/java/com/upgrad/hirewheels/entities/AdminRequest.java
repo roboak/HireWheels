@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Table(name="ADMINREQUEST")
 public class AdminRequest {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     int requestId;
     String userComments;
     String adminComments;

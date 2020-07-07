@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name="LOCATION")
 public class Location {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     int locationId;
     @Column( nullable = false)
     String locationName;

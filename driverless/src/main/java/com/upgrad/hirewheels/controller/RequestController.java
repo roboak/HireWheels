@@ -1,7 +1,7 @@
 package com.upgrad.hirewheels.controller;
 
-import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.dto.AdminRequestDTO;
+import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.RequestService;
@@ -9,14 +9,12 @@ import com.upgrad.hirewheels.validator.RequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 public class RequestController {
 

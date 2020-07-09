@@ -1,6 +1,5 @@
 package com.upgrad.hirewheels;
 
-import com.upgrad.hirewheels.constants.ActivityEnum;
 import com.upgrad.hirewheels.dao.*;
 import com.upgrad.hirewheels.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 	VehicleSubCategoryDAO vehicleSubCategoryDAO;
 
 	@Autowired
-	CityDAO cityDAO;
+    CityDAO cityDAO;
 
 	@Autowired
 	FuelTypeDAO fuelTypeDAO;
@@ -45,7 +44,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 	LocationDAO locationDAO;
 
 	@Autowired
-	AdminRequestDAO adminRequestDAO;
+    AdminRequestDAO adminRequestDAO;
 
 	@Autowired
 	BookingDAO bookingDAO;
@@ -137,7 +136,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 		vehicleSubCategories.add(vehicleSubCategory4);
 		VehicleSubCategory vehicleSubCategory5 = new VehicleSubCategory();
 		vehicleSubCategory5.setVehicleSubCategoryName("DIRT BIKE");
-		vehicleSubCategory5.setPricePerHour(150);
+		vehicleSubCategory5.setPricePerHour(200);
 		vehicleSubCategory5.setVehicleCategory(vehicleCategoryDAO.findByVehicleCategoryId(11));
 		vehicleSubCategories.add(vehicleSubCategory5);
 		VehicleSubCategory vehicleSubCategory6 = new VehicleSubCategory();

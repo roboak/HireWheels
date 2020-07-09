@@ -1,8 +1,8 @@
 package com.upgrad.hirewheels.validator;
 
 import com.upgrad.hirewheels.dao.UserDAO;
-import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.dto.AdminRequestDTO;
+import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.entities.Vehicle;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.springframework.beans.factory.annotation.Autowired;

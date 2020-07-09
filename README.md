@@ -31,22 +31,16 @@ VehicleCategoryId(11);
 VehicleCategoryName("BIKE");
 
 # VehicleSubCategory
-VehicleSubCategoryId(10001);
 VehicleSubCategoryName("SUV");
 PricePerHour(300);
-VehicleSubCategoryId(10002);
 VehicleSubCategoryName("SEDAN");
 PricePerHour(350);
-VehicleSubCategoryId(10003);
 VehicleSubCategoryName("HATCHBACK");
 PricePerHour(250);
-VehicleSubCategoryId(10004);
 VehicleSubCategoryName("CRUISER");
 PricePerHour(200);
-VehicleSubCategoryId(10005);
 VehicleSubCategoryName("DIRT BIKE");
 PricePerHour(150);
-VehicleSubCategoryId(10006);
 VehicleSubCategoryName("SPORTS BIKE");
 PricePerHour(150);
 

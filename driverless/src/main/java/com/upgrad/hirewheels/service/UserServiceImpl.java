@@ -114,7 +114,7 @@ public class UserServiceImpl implements UserService{
 
 
     /**
-     * All the methods required for JWT
+     * Method required for JWT
      */
 
     public UserDetails loadUserDetails(String email) throws UserNotFoundException {
@@ -124,69 +124,6 @@ public class UserServiceImpl implements UserService{
             throw new UserNotFoundException("No User Available" + email);
         }
         return  new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword() , new ArrayList<>());
-    }
-
-    public void updateAccessTokenUserMap(String accessTokenPrev, String accessTokenNew, User user) {
-        if (accessTokenUserMap.containsKey(accessTokenPrev)) {
-            User user1 = accessTokenUserMap.get(accessTokenPrev);
-            accessTokenUserMap.remove(accessTokenPrev);
-            accessTokenUserMap.put(accessTokenNew, user1);
-        } else {
-            accessTokenUserMap.put(accessTokenNew, user);
-        }
-    }
-
-    public User getUserFromAccessToken(String accessToken) {
-        return accessTokenUserMap.get(accessToken);
-    }
-
-    public void removeUserFromAccessTokenMap(String accessToken) {
-        if (accessTokenUserMap.containsKey(accessToken)) {
-            accessTokenUserMap.remove(accessToken);
-        }
-    }
-
-    public boolean isTokenPresent(String token) {
-        return tokenStore.contains(token);
-    }
-
-    public void removeTokenIfPresent(String token) {
-        if (tokenStore.contains(token)) {
-            tokenStore.remove(token);
-        }
-    }
-
-    public void updateRefreshTokenAccessTokenMap(String refreshToken, String accessToken) {
-        this.refreshTokenAccessTokenMap.put(refreshToken, accessToken);
-    }
-
-    public void removeRefreshTokenAccessTokenMap(String refreshToken) {
-        if (this.refreshTokenAccessTokenMap.containsKey(refreshToken)) {
-            this.refreshTokenAccessTokenMap.remove(refreshToken);
-        }
-    }
-
-    public String getCurrentAccessTokenFromRefreshToken(String refreshToken) {
-        return this.refreshTokenAccessTokenMap.get(refreshToken);
-    }
-
-    public void addToken(String token) {
-        tokenStore.add(token);
-    }
-
-    public void removeRefreshToken(String refreshToken) {
-        if (refreshTokenUserMap.containsKey(refreshToken)) {
-            refreshTokenUserMap.remove(refreshToken);
-        }
-    }
-
-    public User getUserfromRefreshToken(String refreshToken) {
-        return refreshTokenUserMap.get(refreshToken);
-    }
-
-
-    public void addRefreshToken(String refreshToken, User user) {
-        this.refreshTokenUserMap.put(refreshToken, user);
     }
 
 }

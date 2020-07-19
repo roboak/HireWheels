@@ -26,11 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
   }
 
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }
-
   @Override
   protected void configure(HttpSecurity http) throws Exception {
 
@@ -46,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/users").permitAll()
         .antMatchers("/access-token/refresh").permitAll()
             .antMatchers("/users/access-token/password").permitAll()
+            .antMatchers("/vehicles").permitAll()
         .anyRequest()
         .authenticated()
         .and()

@@ -25,8 +25,6 @@ public class User {
     @Column( nullable = false, unique = true)
     String mobileNo;
     int walletMoney;
-    String refreshToken;
-    String jwtToken;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     UserRole userRole;

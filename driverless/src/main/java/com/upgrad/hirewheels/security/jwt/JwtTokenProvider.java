@@ -19,14 +19,14 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-  @Value("${security.jwt.token.secret-key:secret}")
-  private String secretKey = "secret";
+  @Value("${security.jwt.token.secret-key}")
+  private String secretKey;
 
-  @Value("${security.jwt.token.expire-length:600000}")
-  private long validityInMilliseconds = 600000;//10 minutes
+  @Value("${security.jwt.token.expire-length}")
+  private long validityInMilliseconds;//10 minutes
 
-  @Value("${security.jwt.token.expire-length:3600000}")
-  private long refreshValidityInMilliseconds = 3600000; //60 minutes
+  @Value("${security.jwt.refresh.expire-length}")
+  private long refreshValidityInMilliseconds;
 
   @Autowired
   UserServiceImpl userService;
@@ -84,9 +84,6 @@ public class JwtTokenProvider {
   }
 
   public boolean validateToken(String token) {
-    if (!userService.isTokenPresent(token)) {
-      throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
-    }
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 

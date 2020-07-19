@@ -16,4 +16,5 @@ public class VehicleDetailResponse {
     int costPerHour;
     int activityId;
     int requestStatusId;
+    int vehicleSubCategoryId;
 }

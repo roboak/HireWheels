@@ -91,6 +91,7 @@ public class VehicleServiceImpl implements VehicleService {
                     vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
                     vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
                     vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                    vehicleDetailResponse.setVehicleSubCategoryId(v.getVehicleSubCategory().getVehicleSubCategoryId());
                     mapVehicle.add(vehicleDetailResponse);
                 }
             }
@@ -126,6 +127,7 @@ public class VehicleServiceImpl implements VehicleService {
                 vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
                 vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
                 vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                vehicleDetailResponse.setVehicleSubCategoryId(v.getVehicleSubCategory().getVehicleSubCategoryId());
                 mapVehicle.add(vehicleDetailResponse);
         }
         return mapVehicle;

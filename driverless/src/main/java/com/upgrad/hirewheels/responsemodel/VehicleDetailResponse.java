@@ -1,9 +1,6 @@
 package com.upgrad.hirewheels.responsemodel;
 
-import com.upgrad.hirewheels.entities.Booking;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class VehicleDetailResponse {
@@ -19,4 +16,5 @@ public class VehicleDetailResponse {
     int costPerHour;
     int activityId;
     int requestStatusId;
+    int vehicleSubCategoryId;
 }

@@ -1,16 +1,23 @@
 package com.upgrad.hirewheels.service;
 
+import com.upgrad.hirewheels.dao.UserDAO;
 import com.upgrad.hirewheels.dao.UserRoleDAO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.entities.User;
-import com.upgrad.hirewheels.dao.UserDAO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import com.upgrad.hirewheels.exceptions.UserAlreadyExistsException;
 import com.upgrad.hirewheels.exceptions.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -21,6 +28,22 @@ public class UserServiceImpl implements UserService{
 
     @Autowired
     UserRoleDAO userRoleDAO;
+
+    private Map<String, User> refreshTokenUserMap;
+
+    private List<String> tokenStore;
+
+    private Map<String, String> refreshTokenAccessTokenMap;
+
+    private Map<String, User> accessTokenUserMap;
+
+    @PostConstruct
+    public void init() {
+        refreshTokenUserMap = new HashMap<>();
+        tokenStore = new ArrayList<>();
+        refreshTokenAccessTokenMap = new HashMap<>();
+        accessTokenUserMap = new HashMap<>();
+    }
 
     /**
      * Checks if the user is registered or not. If registered it returns the user details else throws an error.
@@ -87,6 +110,20 @@ public class UserServiceImpl implements UserService{
                 } else {
                     throw new APIException("The new password should be different from the existing one");
                 }
+    }
+
+
+    /**
+     * Method required for JWT
+     */
+
+    public UserDetails loadUserDetails(String email) throws UserNotFoundException {
+        //JWT: Changed Email
+        User user = userDAO.findByEmail(email);
+        if (user == null) {
+            throw new UserNotFoundException("No User Available" + email);
+        }
+        return  new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword() , new ArrayList<>());
     }
 
 }

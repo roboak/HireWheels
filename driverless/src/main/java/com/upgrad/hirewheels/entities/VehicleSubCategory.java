@@ -9,7 +9,6 @@ import java.util.List;
 @Table(name="VEHICLESUBCATEGORY")
 public class VehicleSubCategory {
     @Id
-    @GeneratedValue
     int vehicleSubCategoryId;
     @Column( nullable = false, unique = true)
     String vehicleSubCategoryName;

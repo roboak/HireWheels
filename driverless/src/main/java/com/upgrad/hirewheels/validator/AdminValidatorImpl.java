@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class AdminValidatorImpl implements AdminValidator{
+public class AdminValidatorImpl implements AdminValidator {
 
     List<Integer> requestIds = new ArrayList<>(Arrays.asList(301,302,303));
     List<Integer> activityIds = new ArrayList<>(Arrays.asList(201,202,203));

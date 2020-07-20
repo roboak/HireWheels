@@ -2,15 +2,16 @@ package com.upgrad.hirewheels.service;
 
 import com.upgrad.hirewheels.constants.ActivityEnum;
 import com.upgrad.hirewheels.constants.StatusEnum;
-import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
-import com.upgrad.hirewheels.entities.*;
 import com.upgrad.hirewheels.dao.*;
+import com.upgrad.hirewheels.entities.AdminRequest;
+import com.upgrad.hirewheels.entities.Booking;
+import com.upgrad.hirewheels.entities.Vehicle;
+import com.upgrad.hirewheels.responsemodel.VehicleDetailResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,6 +91,7 @@ public class VehicleServiceImpl implements VehicleService {
                     vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
                     vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
                     vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                    vehicleDetailResponse.setVehicleSubCategoryId(v.getVehicleSubCategory().getVehicleSubCategoryId());
                     mapVehicle.add(vehicleDetailResponse);
                 }
             }
@@ -125,6 +127,7 @@ public class VehicleServiceImpl implements VehicleService {
                 vehicleDetailResponse.setCarImageUrl(v.getCarImageUrl());
                 vehicleDetailResponse.setActivityId(v.getAdminRequest().getActivity().getActivityId());
                 vehicleDetailResponse.setRequestStatusId(v.getAdminRequest().getRequestStatus().getRequestStatusId());
+                vehicleDetailResponse.setVehicleSubCategoryId(v.getVehicleSubCategory().getVehicleSubCategoryId());
                 mapVehicle.add(vehicleDetailResponse);
         }
         return mapVehicle;

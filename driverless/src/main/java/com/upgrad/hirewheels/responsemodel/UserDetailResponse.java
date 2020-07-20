@@ -13,4 +13,6 @@ public class UserDetailResponse {
     int walletMoney;
     String successMessage;
     String roleName;
+    String jwtToken;
+    String refreshToken;
 }

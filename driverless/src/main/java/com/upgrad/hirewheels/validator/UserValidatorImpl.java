@@ -1,8 +1,8 @@
 package com.upgrad.hirewheels.validator;
 
-import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
+import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.exceptions.APIException;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Service;

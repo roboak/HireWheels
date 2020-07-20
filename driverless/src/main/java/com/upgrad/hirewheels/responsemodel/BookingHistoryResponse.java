@@ -1,6 +1,7 @@
 package com.upgrad.hirewheels.responsemodel;
 
 import lombok.Data;
+
 import java.util.Date;
 
 @Data

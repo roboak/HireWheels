@@ -17,7 +17,6 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 public class VehicleController {
 

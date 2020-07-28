@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.0.RELEASE</version>
+		<version>2.3.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>driverless</artifactId>
+	<artifactId>HireWheels</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>driverless</name>
+	<name>HireWheels</name>
 	<description>Project for Driverless Application</description>
 
 	<properties>

@@ -68,6 +68,22 @@ public class InitServiceImpl implements InitService {
         location.setPincode(400018);
         location.setCity(cityDAO.findById(1).get());
         locationDAO.save(location);
+
+        Location location2 = new Location();
+        location2.setLocationId(2);
+        location2.setLocationName("Chembur");
+        location2.setAddress("Oplic Complex");
+        location2.setPincode(400018);
+        location2.setCity(cityDAO.findById(1).get());
+        locationDAO.save(location2);
+
+        Location location3 = new Location();
+        location3.setLocationId(3);
+        location3.setLocationName("Powai");
+        location3.setAddress("Hiranandani Tower");
+        location3.setPincode(400018);
+        location3.setCity(cityDAO.findById(1).get());
+        locationDAO.save(location3);
     }
 
     private void addRequestStatus() {

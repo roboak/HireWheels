@@ -15,5 +15,13 @@ public class FuelType {
         String fuelType;
         @OneToMany(fetch = FetchType.LAZY, mappedBy = "fuelType")
         List<Vehicle> vehicles;
+
+    public FuelType(int fuelTypeId, String fuelType) {
+        this.fuelTypeId = fuelTypeId;
+        this.fuelType = fuelType;
+    }
+
+    public FuelType() {
+    }
 }
 

@@ -1,7 +1,7 @@
 package com.upgrad.hirewheels.validator;
 
 import com.upgrad.hirewheels.dto.BookingDTO;
-import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.*;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -14,7 +14,7 @@ public class BookingValidatorImpl implements BookingValidator {
 
 
     @Override
-    public void validateBooking(BookingDTO vehicle) throws ParseException {
+    public void validateBooking(BookingDTO vehicle) throws ParseException, APIException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateString = sdf.format(new Date());
         Date todaysDate = sdf.parse(dateString);
@@ -38,10 +38,5 @@ public class BookingValidatorImpl implements BookingValidator {
         }
     }
 
-    @Override
-    public void validateBookingHistory(int userId) {
-        if (userId == 0){
-            throw new APIException("User Id Id can't be empty");
-        }
-    }
+
 }

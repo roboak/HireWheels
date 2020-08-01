@@ -28,24 +28,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-
-        http.cors().and().httpBasic()
-            .disable()
-        .csrf()
-        .disable()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/users/access-token").permitAll()
-            .antMatchers("/users").permitAll()
-        .antMatchers("/access-token/refresh").permitAll()
-            .antMatchers("/users/access-token/password").permitAll()
-            .antMatchers("/vehicles").permitAll()
-        .anyRequest()
-        .authenticated()
-        .and()
-        .apply(new JwtConfigurer(jwtTokenProvider));
+      http.cors()
+                .and().httpBasic()
+                .disable()
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/users/access-token").permitAll()
+                .antMatchers("/users").permitAll()
+                .antMatchers("/vehicles").permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .apply(new JwtConfigurer(jwtTokenProvider));
   }
 
   @Bean

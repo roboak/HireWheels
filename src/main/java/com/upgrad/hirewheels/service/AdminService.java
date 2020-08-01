@@ -1,11 +1,13 @@
 package com.upgrad.hirewheels.service;
+import com.upgrad.hirewheels.entities.Vehicle;
+import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.VehicleNotFoundException;
+import com.upgrad.hirewheels.exceptions.VehicleNumberNotUniqueException;
 
-import com.upgrad.hirewheels.dto.AdminActivityDTO;
-import com.upgrad.hirewheels.responsemodel.AdminRequestResponse;
-
-import java.util.List;
 
 public interface AdminService {
-    List<AdminRequestResponse> getAllAdminRequest(int requestId);
-    Boolean updateRequest(AdminActivityDTO vehicleDTO, int requestId);
+
+    Vehicle enterVehicleDetails(Vehicle vehicle) throws VehicleNumberNotUniqueException;
+    Vehicle changeAvailabilityRequest(int vehicleId, int availabilityStatus)throws VehicleNotFoundException;
+
 }

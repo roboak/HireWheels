@@ -15,5 +15,13 @@ public class City {
     String cityName;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
     List<Location> locations;
+
+    public City() {
+    }
+
+    public City(int cityId, String cityName) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+    }
 }
 

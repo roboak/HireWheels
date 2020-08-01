@@ -1,13 +1,9 @@
 package com.upgrad.hirewheels.service;
 
-import com.upgrad.hirewheels.dto.BookingDTO;
 import com.upgrad.hirewheels.entities.Booking;
-import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.BookingHistoryResponse;
-
-import java.util.List;
+import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.InsufficientBalanceException;
 
 public interface BookingService {
-    Booking addBooking(BookingDTO booking) throws GlobalExceptionHandler;
-    List<BookingHistoryResponse> bookingHistory(int userId) throws GlobalExceptionHandler;
+    Booking addBooking(Booking booking) throws APIException, InsufficientBalanceException;
 }

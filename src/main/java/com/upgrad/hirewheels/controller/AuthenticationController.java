@@ -1,15 +1,17 @@
 package com.upgrad.hirewheels.controller;
 
-import com.upgrad.hirewheels.dto.ForgetPWDDTO;
 import com.upgrad.hirewheels.dto.LoginDTO;
 import com.upgrad.hirewheels.dto.UserDTO;
 import com.upgrad.hirewheels.entities.User;
-import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
+import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.BadCredentialsException;
+import com.upgrad.hirewheels.exceptions.UserAlreadyExistsException;
+import com.upgrad.hirewheels.exceptions.UserNotFoundException;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
-import com.upgrad.hirewheels.responsemodel.UserDetailResponse;
 import com.upgrad.hirewheels.security.jwt.JwtTokenProvider;
 import com.upgrad.hirewheels.service.UserService;
-import com.upgrad.hirewheels.service.UserServiceImpl;
+import com.upgrad.hirewheels.utils.DTOEntityConverter;
+import com.upgrad.hirewheels.utils.EntityDTOConverter;
 import com.upgrad.hirewheels.validator.UserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,65 +35,35 @@ public class AuthenticationController{
     @Autowired
     UserValidator userValidator;
 
+    @Autowired
+    DTOEntityConverter dtoEntityConverter;
+
+    @Autowired
+    EntityDTOConverter entityDTOConverter;
+
     @PostMapping("/users/access-token")
-    public ResponseEntity userLogin(@RequestBody LoginDTO loginDTO){
+    public ResponseEntity userLogin(@RequestBody LoginDTO loginDTO) throws APIException, UserNotFoundException, BadCredentialsException {
         ResponseEntity responseEntity = null;
-        UserDetailResponse userDetailResponse = new UserDetailResponse();
-            try {
-                userValidator.validateuserLogin(loginDTO);
-                User userDetail = userService.getUserDetails(loginDTO);
-                //JWT Starts
-                //JWT Changed to Email
-                String refreshToken = jwtTokenProvider.createRefreshToken(userDetail.getEmail());
-                String token = jwtTokenProvider.createToken(userDetail.getEmail());
-                //JWT Ends
-                userDetailResponse.setUserId(userDetail.getUserId());
-                userDetailResponse.setFirstName(userDetail.getFirstName());
-                userDetailResponse.setLastName(userDetail.getLastName());
-                userDetailResponse.setEmail(userDetail.getEmail());
-                userDetailResponse.setMobileNumber(userDetail.getMobileNo());
-                userDetailResponse.setWalletMoney(userDetail.getWalletMoney());
-                userDetailResponse.setRoleName(userDetail.getUserRole().getRoleName());
-                userDetailResponse.setJwtToken(token);
-                userDetailResponse.setRefreshToken(refreshToken);
-                userDetailResponse.setSuccessMessage("User Successfully Logged In");
-                responseEntity = ResponseEntity.ok(userDetailResponse);
-            } catch (GlobalExceptionHandler e){
-                logger.error(e.getMessage());
-            }
+        userValidator.validateuserLogin(loginDTO);
+        User userDetail = userService.getUserDetails(loginDTO);
+        UserDTO userDTO = entityDTOConverter.convertToUserDTO(userDetail);
+        String token = jwtTokenProvider.createToken(userDetail.getEmail());
+        userDTO.setJwtToken(token);
+        responseEntity = ResponseEntity.ok(userDTO);
         return responseEntity;
     }
 
     @PostMapping("/users")
-    public ResponseEntity userSignUp(@RequestBody UserDTO userDTO) {
+    public ResponseEntity userSignUp(@RequestBody UserDTO userDTO) throws APIException, UserAlreadyExistsException {
         ResponseEntity responseEntity = null;
-        try {
-            userValidator.validateUserSignUp(userDTO);
-            User functionReturn = userService.createUser(userDTO);
-            if (functionReturn != null) {
-                CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
-                responseEntity = new ResponseEntity(response, HttpStatus.OK);
-            }
-        }
-        catch (GlobalExceptionHandler e){
-                logger.error(e.getMessage());
+        userValidator.validateUserSignUp(userDTO);
+        User savedUser = userService.createUser(dtoEntityConverter.convertToUserEntity(userDTO));
+        if (savedUser != null) {
+            CustomResponse response = new CustomResponse(new Date(), "User Successfully Signed Up", 200);
+            responseEntity = new ResponseEntity(response, HttpStatus.OK);
         }
         return responseEntity;
     }
 
-    @PutMapping("/users/access-token/password")
-    public ResponseEntity changePassword(@RequestBody ForgetPWDDTO forgetPWDDTO) {
-        ResponseEntity responseEntity = null;
-        try {
-            userValidator.validateChangePassword(forgetPWDDTO);
-            boolean functionReturn = userService.updatePassword(forgetPWDDTO);
-            if (functionReturn == true) {
-                CustomResponse response = new CustomResponse(new Date(), "Password Successfully Changed", 200);
-                return new ResponseEntity(response, HttpStatus.OK);
-            }
-        } catch (GlobalExceptionHandler e){
-                logger.error(e.getMessage());
-        }
-        return responseEntity;
-    }
+
 }

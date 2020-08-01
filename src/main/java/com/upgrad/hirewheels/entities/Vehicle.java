@@ -22,6 +22,9 @@ public class Vehicle {
    String color;
    @Column( nullable = false)
    String carImageUrl;
+   @Column( nullable = false)
+   int availabilityStatus;
+
    @ManyToOne(fetch = FetchType.LAZY,cascade
            = CascadeType.MERGE)
    @JoinColumn(name = "vehicleSubCategoryId")
@@ -36,16 +39,23 @@ public class Vehicle {
    @JsonBackReference
    @JoinColumn(name = "locationId")
    Location locationWithVehicle;
-   @ManyToOne(fetch = FetchType.EAGER,cascade
-           = CascadeType.MERGE)
-   @JsonBackReference
-   @JoinColumn(name = "userId")
-   User user;
+
    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicleWithBooking",cascade
            = CascadeType.MERGE)
    @JsonManagedReference
    List<Booking> bookingsList;
-   @OneToOne(mappedBy = "vehicle")
-   @JsonManagedReference
-   AdminRequest adminRequest;
+
+   public Vehicle(String vehicleModel, String vehicleNumber, String color, String carImageUrl, int availabilityStatus, VehicleSubCategory vehicleSubCategory, FuelType fuelType, Location locationWithVehicle) {
+      this.vehicleModel = vehicleModel;
+      this.vehicleNumber = vehicleNumber;
+      this.color = color;
+      this.carImageUrl = carImageUrl;
+      this.availabilityStatus = availabilityStatus;
+      this.vehicleSubCategory = vehicleSubCategory;
+      this.fuelType = fuelType;
+      this.locationWithVehicle = locationWithVehicle;
+   }
+
+   public Vehicle() {
+   }
 }

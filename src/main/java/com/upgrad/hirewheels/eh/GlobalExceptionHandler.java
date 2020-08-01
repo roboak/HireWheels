@@ -1,8 +1,7 @@
-package com.upgrad.hirewheels.exceptions.advice;
+package com.upgrad.hirewheels.eh;
 
 
-import com.upgrad.hirewheels.exceptions.APIException;
-import com.upgrad.hirewheels.exceptions.UserNotFoundException;
+import com.upgrad.hirewheels.exceptions.*;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,29 +13,40 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.sql.SQLException;
 import java.util.Date;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 
 @ControllerAdvice
-public class GlobalExceptionHandler extends Exception{
+public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    @ExceptionHandler({RuntimeException.class})
-    public ResponseEntity<Object> handleRunTimeException(RuntimeException ex) {
-        return error(BAD_REQUEST, ex);
-    }
+//    @ExceptionHandler({RuntimeException.class})
+//    public ResponseEntity<Object> handleRunTimeException(RuntimeException ex) {
+//        return error(BAD_REQUEST, ex);
+//    }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({UserNotFoundException.class, VehicleNotFoundException.class})
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        return error(UNAUTHORIZED, ex);
+        return error(NOT_FOUND, ex);
     }
 
-    @ExceptionHandler(APIException.class)
+    @ExceptionHandler({APIException.class, UserAlreadyExistsException.class, VehicleNumberNotUniqueException.class})
     public ResponseEntity<Object> handleAPIException(APIException ex) {
         return error(BAD_REQUEST, ex);
     }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<Object> handleInsufficientBalanceException(InsufficientBalanceException ex) {
+        return error(FORBIDDEN, ex);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
+        return error(UNAUTHORIZED, ex);
+    }
+
+
 
     @ExceptionHandler({SQLException.class, NullPointerException.class})
     public ResponseEntity<Object> handle(Exception ex) {

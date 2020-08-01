@@ -25,16 +25,26 @@ public class User {
     @Column( nullable = false, unique = true)
     String mobileNo;
     int walletMoney;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     UserRole userRole;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonManagedReference
-    List<Vehicle> vehiclesList;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bookingWithUser")
     @JsonManagedReference
     List<Booking> bookingList;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @JsonManagedReference
-    List<AdminRequest> adminRequestList;
+
+    public User(String firstName, String lastName, String password, String email, String mobileNo, int walletMoney, UserRole userRole) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.password = password;
+        this.email = email;
+        this.mobileNo = mobileNo;
+        this.walletMoney = walletMoney;
+        this.userRole = userRole;
+       // this.bookingList = bookingList;
+    }
+
+    public User(){
+    }
 }

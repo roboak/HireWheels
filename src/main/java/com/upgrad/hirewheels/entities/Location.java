@@ -23,7 +23,23 @@ public class Location {
     @ManyToOne(fetch = FetchType.LAZY,cascade
             = CascadeType.MERGE)
     City city;
+
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "locationWithBooking",cascade
             = CascadeType.MERGE)
     List<Booking> bookingsList;
+
+
+
+    public Location(int locationId, String locationName, String address, int pincode, City city) {
+        this.locationId = locationId;
+        this.locationName = locationName;
+        this.address = address;
+        this.pincode = pincode;
+        this.city = city;
+    }
+
+    public Location(){
+
+    }
 }

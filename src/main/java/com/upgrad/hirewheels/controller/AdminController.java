@@ -1,12 +1,15 @@
 package com.upgrad.hirewheels.controller;
 
 
-import com.upgrad.hirewheels.dto.AdminActivityDTO;
-import com.upgrad.hirewheels.exceptions.advice.GlobalExceptionHandler;
-import com.upgrad.hirewheels.responsemodel.AdminRequestResponse;
+import com.upgrad.hirewheels.dto.VehicleDTO;
+import com.upgrad.hirewheels.entities.Vehicle;
+import com.upgrad.hirewheels.exceptions.APIException;
+import com.upgrad.hirewheels.exceptions.VehicleNotFoundException;
+import com.upgrad.hirewheels.exceptions.VehicleNumberNotUniqueException;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
 import com.upgrad.hirewheels.service.AdminService;
-import com.upgrad.hirewheels.validator.AdminValidator;
+import com.upgrad.hirewheels.utils.DTOEntityConverter;
+import com.upgrad.hirewheels.validator.AdminRequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 
 @RestController
 public class AdminController {
@@ -24,35 +26,34 @@ public class AdminController {
     AdminService adminService;
 
     @Autowired
-    AdminValidator adminValidator;
+    AdminRequestValidator adminRequestValidator;
+
+    @Autowired
+    DTOEntityConverter dtoEntityConverter;
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
-
-    @GetMapping("requests")
-    public ResponseEntity getAllApprovals(@RequestParam("statusId") int statusId){
+    @PutMapping("vehicles/{vehicleId}")
+    public ResponseEntity changeVehicleAvailability(@RequestBody VehicleDTO vehicleDTO, @PathVariable int vehicleId) throws APIException, VehicleNotFoundException {
         ResponseEntity responseEntity = null;
-        try {
-            adminValidator.validateGetAllApprovals(statusId);
-            List<AdminRequestResponse> adminRequestList = adminService.getAllAdminRequest(statusId);
-            responseEntity = ResponseEntity.ok(adminRequestList);
-        } catch (GlobalExceptionHandler e) {
-            logger.error(e.getMessage());
+        int availability_status = vehicleDTO.getAvailability_status();
+        adminRequestValidator.validateChangeVehicleAvailability(availability_status);
+        Vehicle vehicle = adminService.changeAvailabilityRequest(vehicleId, availability_status);
+        CustomResponse response = new CustomResponse(new Date(), "Activity performed successfully", 200);
+        responseEntity =  new ResponseEntity(response, HttpStatus.OK);
+        return responseEntity;
         }
+
+    @PostMapping("/vehicles")
+    public ResponseEntity addVehicleRequest(@RequestBody VehicleDTO vehicleDTO) throws APIException, VehicleNumberNotUniqueException {
+        ResponseEntity responseEntity = null;
+        adminRequestValidator.validateAddVehicleRequest(vehicleDTO);
+        Vehicle vehicle = dtoEntityConverter.convertToVehicleEntity(vehicleDTO);
+        adminService.enterVehicleDetails(vehicle);
+        CustomResponse response = new CustomResponse(new Date(), "Vehicle Added Successfully", 200);
+        responseEntity =  new ResponseEntity(response, HttpStatus.OK);
         return responseEntity;
     }
-
-    @PutMapping("/requests/{requestId}")
-    public ResponseEntity updateVehicle(@RequestBody AdminActivityDTO adminActivityDTO, @PathVariable int requestId) {
-        ResponseEntity responseEntity = null;
-        try {
-            adminValidator.validateUpdateVehicleRequest(adminActivityDTO, requestId);
-            adminService.updateRequest(adminActivityDTO, requestId);
-            CustomResponse response = new CustomResponse(new Date(), "Request Updated Successfully.",200);
-            responseEntity =  new ResponseEntity(response, HttpStatus.OK);
-        } catch (GlobalExceptionHandler e){
-            logger.error(e.getMessage());
-        }
-    return responseEntity;
     }
-}
+
+

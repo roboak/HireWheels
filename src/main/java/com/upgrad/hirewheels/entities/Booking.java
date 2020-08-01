@@ -27,8 +27,6 @@ public class Booking {
     @JsonBackReference
     User bookingWithUser;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY,cascade
             = CascadeType.MERGE)
     @JoinColumn(name = "locationId")

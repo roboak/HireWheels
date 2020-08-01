@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class VehicleDTO {
+     int vehicleId;
      String vehicleModel;
      String vehicleNumber;
      int vehicleSubCategoryId;
@@ -11,6 +12,6 @@ public class VehicleDTO {
      int fuelTypeId;
      int locationId;
      String carImageUrl;
-     String userComments;
-     int userId;
+     int availability_status;
+     int pricePerDay;
 }

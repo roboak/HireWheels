@@ -14,7 +14,16 @@ public class UserRole {
     int roleId;
     @Column(unique = true)
     String roleName;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JsonManagedReference
-    List<User> userList;
+
+    public UserRole(int roleId, String roleName) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
+
+    public UserRole() {
+    }
+
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JsonManagedReference
+//    List<User> userList;
 }

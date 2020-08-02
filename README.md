@@ -1,68 +1,21 @@
-# HireWheels
+#Steps to Start the Application
 
-Tables and constants for the creation of preloaded values of the application.
+1. Import the Project in the IntelliJ IDE
+2. Run the Project
 
-# UserRole Table
-RoleId = 1;
-RoleName = Admin;
-RoleId = 2;
-RoleName = User;
+# Note 1
 
-# User Table
-FirstName("Upgrad");
-LastName("Admim");
-Email("upgrad@gmail.com");
-MobileNo(9898989890);
-Password("admin@123");
-WalletMoney(10000);
+When the project is being executed for the first time, make sure that the following line is uncommented in the HireWheelsApplication.java file-
+"initService.start();"
 
-# Activity
-ActivityId(201);
-ActivityType("VEHICLE_REGISTER");
-ActivityId(202);
-ActivityType("CAR_OPT_IN");
-ActivityId(203);
-ActivityType("CAR_OPT_OUT");
+This will call the initService which will pre-populate some of the tables in the database.
 
-# Vehicle Category
-VehicleCategoryId(10);
-VehicleCategoryName("CAR");
-VehicleCategoryId(11);
-VehicleCategoryName("BIKE");
+#Note 2
 
-# VehicleSubCategory
-VehicleSubCategoryName("SUV");
-PricePerHour(300);
-VehicleSubCategoryName("SEDAN");
-PricePerHour(350);
-VehicleSubCategoryName("HATCHBACK");
-PricePerHour(250);
-VehicleSubCategoryName("CRUISER");
-PricePerHour(200);
-VehicleSubCategoryName("DIRT BIKE");
-PricePerHour(150);
-VehicleSubCategoryName("SPORTS BIKE");
-PricePerHour(150);
+If you have successfully run the project at least once on your IDE, comment out the initService method call in the HireWheelsApplication.java file. Otherwise, the code will try to re-enter the same data in the same table which may lead to having duplicate entries in the tables and in some cases might lead to several errors due to unique constraint violation.
 
-# City
-CityId(1);
-CityName("Mumbai");
+#Pre-Populated tables and their values
 
-# Fuel Type
-FuelType("Petrol");
-FuelTypeId(1);
-FuelType("Diesel");
-FuelTypeId(2);
+The following link contains information about the tables which will be pre-populated by the initService
 
-# RequestStatus
-RequestStatusId(301);
-RequestStatusName("PENDING");
-RequestStatusId(302);
-RequestStatusName("APPROVED");
-RequestStatusId(303);
-RequestStatusName("REJECTED");
-
-# Location
-LocationName("Worli");
-Address("Dr E Moses Rd, Worli Naka, Upper Worli");
-Pincode(400018);
+https://docs.google.com/document/d/15dMhSPcWLzT29eQyOsNLL9IjEOhhiQBzsrDiBlNE254/edit?usp=sharing

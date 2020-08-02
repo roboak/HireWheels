@@ -1,13 +1,12 @@
 # Steps to Start the Application
 
 1. Import the Project in the IntelliJ IDE
-2. Run the Project
+2. Configure the database connection properties in the application.properties file
+3. Run the Project
 
 # Note 1
 
-When the project is being executed for the first time, make sure that the following line is uncommented in the HireWheelsApplication.java file-
-"initService.start();"
-
+When the project is being executed for the first time, make sure that the code calling the initService in the HireWheelsApplication.java file is uncommented.
 This will call the initService which will pre-populate some of the tables in the database.
 
 # Note 2

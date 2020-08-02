@@ -18,3 +18,8 @@ If you have successfully run the project at least once on your IDE, comment out 
 The following link contains information about the tables which will be pre-populated by the initService
 
 https://docs.google.com/document/d/15dMhSPcWLzT29eQyOsNLL9IjEOhhiQBzsrDiBlNE254/edit?usp=sharing
+
+# API Documentation
+
+https://documenter.getpostman.com/view/5716890/T1Dv9FUC?version=latest
+

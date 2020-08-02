@@ -20,7 +20,7 @@ import java.util.Map;
 public class RestAuthenticationFailureHandler implements AuthenticationFailureHandler {
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                      AuthenticationException ex) throws IOException, ServletException {
+                                      AuthenticationException ex) throws IOException {
     response.setStatus(HttpStatus.FORBIDDEN.value());
 
     Map<String, Object> data = new HashMap<>();

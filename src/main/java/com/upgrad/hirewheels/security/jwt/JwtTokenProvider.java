@@ -51,20 +51,6 @@ public class JwtTokenProvider {
         .compact();
   }
 
-  public String createRefreshToken(String emailId) {
-
-    Claims claims = Jwts.claims().setSubject(emailId);
-
-    Date now = new Date();
-    Date validity = new Date(now.getTime() + refreshValidityInMilliseconds);
-
-    return Jwts.builder()
-        .setClaims(claims)
-        .setIssuedAt(now)
-        .setExpiration(validity)
-        .signWith(SignatureAlgorithm.HS256, secretKey)
-        .compact();
-  }
 
   public Authentication getAuthentication(String token) throws UserNotFoundException {
     UserDetails userDetails = this.userService.loadUserDetails(getEmail(token));
@@ -83,14 +69,14 @@ public class JwtTokenProvider {
     return null;
   }
 
-  public boolean validateToken(String token) {
+  public boolean validateToken(String token) throws InvalidJwtAuthenticationException {
+
     try {
       Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 
       if (claims.getBody().getExpiration().before(new Date())) {
         return false;
       }
-
       return true;
     } catch (JwtException | IllegalArgumentException e) {
       throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");

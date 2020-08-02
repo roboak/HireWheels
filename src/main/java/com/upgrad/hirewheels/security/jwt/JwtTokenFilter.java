@@ -22,10 +22,10 @@ public class JwtTokenFilter extends GenericFilterBean {
     this.jwtTokenProvider = jwtTokenProvider;
   }
 
-  @SneakyThrows
+//  @SneakyThrows
   @Override
   public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
-      throws IOException, ServletException {
+          throws ServletException, InvalidJwtAuthenticationException, IOException {
 
     String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
     if (token != null && jwtTokenProvider.validateToken(token)) {

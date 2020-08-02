@@ -3,6 +3,7 @@ package com.upgrad.hirewheels.eh;
 
 import com.upgrad.hirewheels.exceptions.*;
 import com.upgrad.hirewheels.responsemodel.CustomResponse;
+import com.upgrad.hirewheels.security.jwt.InvalidJwtAuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -27,12 +28,12 @@ public class GlobalExceptionHandler {
 //    }
 
     @ExceptionHandler({UserNotFoundException.class, VehicleNotFoundException.class})
-    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
+    public ResponseEntity<Object> handleUserNotFoundException(Exception ex) {
         return error(NOT_FOUND, ex);
     }
 
-    @ExceptionHandler({APIException.class, UserAlreadyExistsException.class, VehicleNumberNotUniqueException.class})
-    public ResponseEntity<Object> handleAPIException(APIException ex) {
+    @ExceptionHandler({APIException.class, UserAlreadyExistsException.class, VehicleNumberNotUniqueException.class, InvalidLocationIdException.class})
+    public ResponseEntity<Object> handleAPIException(Exception ex) {
         return error(BAD_REQUEST, ex);
     }
 
@@ -45,7 +46,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleBadCredentialsException(BadCredentialsException ex) {
         return error(UNAUTHORIZED, ex);
     }
-
+    @ExceptionHandler(InvalidJwtAuthenticationException.class)
+    public ResponseEntity<Object> handleInvalidJwtAuthenticationException(InvalidJwtAuthenticationException ex) {
+        return error(FORBIDDEN, ex);
+    }
 
 
     @ExceptionHandler({SQLException.class, NullPointerException.class})

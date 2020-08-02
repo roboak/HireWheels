@@ -11,6 +11,12 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * This is a utility class that contains methods to convert entity objects to DTO objects.
+ * These DTO objects can then be sent back to the client in response bodies.
+ */
+
 @Component
 public class EntityDTOConverter {
 

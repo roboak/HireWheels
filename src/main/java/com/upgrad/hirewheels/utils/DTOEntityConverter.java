@@ -7,10 +7,15 @@ import com.upgrad.hirewheels.dto.VehicleDTO;
 import com.upgrad.hirewheels.entities.Booking;
 import com.upgrad.hirewheels.entities.User;
 import com.upgrad.hirewheels.entities.Vehicle;
+import com.upgrad.hirewheels.exceptions.InvalidLocationIdException;
 import com.upgrad.hirewheels.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * This is a utility class that contains methods to convert DTO objects to entity objects.
+ * These objects can then be directly persisted into the database.
+ */
 @Component
 public class DTOEntityConverter {
 
@@ -29,8 +34,9 @@ public class DTOEntityConverter {
     @Autowired
     UserRoleDAO userRoleDAO;
 
-    public Vehicle convertToVehicleEntity(VehicleDTO vehicleDTO)
-    {
+    public Vehicle convertToVehicleEntity(VehicleDTO vehicleDTO) throws InvalidLocationIdException {
+        locationDAO.findById(vehicleDTO.getLocationId()).
+                orElseThrow(() -> new InvalidLocationIdException("Invalid Location Id"));
         Vehicle vehicle = new Vehicle();
         vehicle.setVehicleModel(vehicleDTO.getVehicleModel());
         vehicle.setVehicleNumber(vehicleDTO.getVehicleNumber());

@@ -7,6 +7,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
+/**
+ * Custom Response body to send success or error messages.
+ */
 @Data
 public class CustomResponse {
 

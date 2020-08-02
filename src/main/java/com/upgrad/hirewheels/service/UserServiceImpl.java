@@ -20,9 +20,12 @@ public class UserServiceImpl implements UserService{
     UserDAO userDAO;
 
     /**
-     * Checks if the user is registered or not. If registered it returns the user details else throws an error.
+     * Checks if the user is registered or not.
+     * If registered it returns the user details else throws an error.
      * @param loginDTO
-     * @return logged in user details.
+     * @return
+     * @throws BadCredentialsException
+     * @throws UserNotFoundException
      */
 
     public User getUserDetails(LoginDTO loginDTO) throws BadCredentialsException, UserNotFoundException {
@@ -38,12 +41,14 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * Checks if the userDTO mobile number/email is already exists or not. If not exists, saves the userDTO detail else throws an error.
-     * @param
-     * @return saved userDTO details.
+     * Checks if the userDTO mobile number/email is already exists or not.
+     * If not exists, saves the userDTO detail else throws an error.
+     * @param user
+     * @return
+     * @throws UserAlreadyExistsException
      */
 
-    public User createUser(User user) {
+    public User createUser(User user) throws UserAlreadyExistsException {
             User returnedUser = userDAO.findByEmail(user.getEmail());
             if ( returnedUser != null) {
                     throw new UserAlreadyExistsException("Email Already Exists");
@@ -55,16 +60,6 @@ public class UserServiceImpl implements UserService{
             User savedUser = userDAO.save(user);
             return savedUser;
     }
-
-    /**
-     * Checks if the user is registered or not. If registered it checks the new password is not equal to the current password.
-     * If the password os different, it updates the password else throws an error.
-     * @param forgetPWDDTO
-     * @return
-     */
-
-
-
 
     /**
      * Method required for JWT

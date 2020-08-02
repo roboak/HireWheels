@@ -20,6 +20,13 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     UserDAO userDAO;
 
+    /**
+     * This method adds booking for a particular vehicle in the database. While adding the booking,
+     * the booking amount should be deducted from the wallet balance of the user.
+     * @param booking
+     * @return
+     * @throws InsufficientBalanceException
+     */
     public Booking addBooking(Booking booking) throws InsufficientBalanceException {
 
         User user = booking.getBookingWithUser();

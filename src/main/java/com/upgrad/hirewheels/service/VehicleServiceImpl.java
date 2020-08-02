@@ -24,7 +24,8 @@ public class VehicleServiceImpl implements VehicleService {
     BookingDAO bookingDAO;
 
     /**
-     * Returns all the available vehicle in the requested Category for booking with respect to Date, Location and Availability.
+     * Returns all the available vehicle in the requested Category for
+     * booking with respect to Date, Location and Availability.
      * @param categoryName
      * @param pickUpDate
      * @param dropDate
@@ -93,12 +94,12 @@ public class VehicleServiceImpl implements VehicleService {
        return availableVehicles;
     }
 
+
     /**
-     * Returns all the vehicle registered by user.
+     * Returns all the vehicle registered on the application.
      * @param
      * @return
      */
-
     public List<Vehicle> fetchAllVehicles() {
         List<Vehicle> returnedVehicleList = vehicleDAO.findAll();
         return returnedVehicleList;

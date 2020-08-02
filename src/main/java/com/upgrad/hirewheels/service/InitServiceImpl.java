@@ -59,8 +59,6 @@ public class InitServiceImpl implements InitService {
         locationDAO.save(location);
     }
 
-
-
     private void addFuelType() {
         List<FuelType> fuelTypeList = Arrays.asList(new FuelType(1,"Petrol"), new FuelType(2, "Diesel"));
         fuelTypeDAO.saveAll(fuelTypeList);
@@ -75,6 +73,7 @@ public class InitServiceImpl implements InitService {
                 new VehicleCategory(11,"BIKE"));
         vehicleCategoryDAO.saveAll(vehicleCategoryList);
     }
+
     private void addVehicleSubCategory() {
         List<VehicleSubCategory> vehicleSubCategories = new ArrayList<>();
 

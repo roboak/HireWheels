@@ -23,3 +23,6 @@ https://docs.google.com/document/d/15dMhSPcWLzT29eQyOsNLL9IjEOhhiQBzsrDiBlNE254/
 
 https://documenter.getpostman.com/view/5716890/T1Dv9FUC?version=latest
 
+# Schema
+https://docs.google.com/spreadsheets/d/1UCFU9chdDwkknfJXDibMp-lqDLyw0RytgtcbSxYqV4s/edit
+

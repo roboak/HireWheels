@@ -42,7 +42,6 @@ public class VehicleController {
      * @param pickupDate
      * @param dropDate
      * @param locationId
-     * @param accessToken
      * @return
      * @throws APIException
      * @throws ParseException
@@ -52,12 +51,11 @@ public class VehicleController {
     public ResponseEntity getAvailableVehicles(@RequestParam("categoryName") String categoryName, @RequestParam("pickUpDate")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date pickupDate,
        @RequestParam("dropDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date dropDate,
-       @RequestParam("locationId") int locationId, @RequestHeader(value = "X-ACCESS-TOKEN") String accessToken) throws APIException, ParseException, BadCredentialsException {
+       @RequestParam("locationId") Integer locationId) throws APIException, ParseException {
 
         ResponseEntity responseEntity = null;
         List<Vehicle> vehiclesList;
-        if(categoryName == null || categoryName.isEmpty() || dropDate == null || pickupDate == null ||locationId == 0){
-            authorisation.adminAuthorization(accessToken);
+        if(categoryName == null || categoryName.isEmpty() || dropDate == null || pickupDate == null ||locationId == null){
             vehiclesList = vehicleService.fetchAllVehicles();
         }
         else {

@@ -26,7 +26,7 @@ public class HireWheelsApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... arg0){
-		//initService.start();
+		initService.start();
 
 	}
 }
